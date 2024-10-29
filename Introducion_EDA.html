@@ -1,0 +1,1459 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Análisis y Modelado Predictivo de Series de Tiempo Aplicado a Precios Históricos &#8212; Análisis Predictivo de Series de Tiempo Aplicado a Precios Históricos del Oro</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Introducion_EDA';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Implementación de Modelos de Benchmark para Series de Tiempo" href="Modelos_Benchmark.html" />
+    <link rel="prev" title="Proyecto Felipe barrios" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Análisis Predictivo de Series de Tiempo Aplicado a Precios Históricos del Oro - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Análisis Predictivo de Series de Tiempo Aplicado a Precios Históricos del Oro - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Proyecto Felipe barrios
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Análisis y Modelado Predictivo de Series de Tiempo Aplicado a Precios Históricos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modelos_Benchmark.html">Implementación de Modelos de Benchmark para Series de Tiempo</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Modelo_custom.html">Modelo Avanzado de Predicción: CNN-LSTM con Atención para Series Temporales de Divisas</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FIntroducion_EDA.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Introducion_EDA.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Análisis y Modelado Predictivo de Series de Tiempo Aplicado a Precios Históricos</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduccion">Introducción:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metodologia">Metodología:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-exploratorio-de-datos-eda">Análisis Exploratorio de Datos (EDA)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#carga-y-descripcion-de-los-datos">Carga y Descripción de los Datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-de-los-datos">Descripción de los Datos</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-de-los-datasets">Visualizacion de los Datasets</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precios-anuales-del-oro-1980-2022">Precios Anuales del Oro (1980 - 2022)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precios-diarios-del-oro-1980-2022">Precios Diarios del Oro (1980 - 2022)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-graficas-de-precios-del-oro-1980-2022">Interpretación Gráficas de Precios del Oro (1980 - 2022)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reduccion-a-una-unica-base">Reduccion a una unica base</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#difrenciacion-de-las-variables-y-analisis-de-tendecia">Difrenciacion de las variables y analisis de tendecia</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-correlacion-entre-las-divisas-1985-2022">Matriz de Correlación entre las Divisas (1985-2022)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-matriz-de-correlacion-entre-las-divisas-1985-2022">Interpretación de la Matriz de Correlación entre las Divisas (1985-2022)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-del-coeficiente-de-variacion-y-componentes-principales">Análisis del Coeficiente de Variación y Componentes Principales</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-analisis-del-coeficiente-de-variacion-cv-y-pca">Interpretación del Análisis del Coeficiente de Variación (CV) y PCA</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#coeficiente-de-variacion-cv">Coeficiente de Variación (CV)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#varianza-explicada-por-los-componentes-principales">Varianza Explicada por los Componentes Principales</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pesos-de-cada-divisa-en-los-componentes-principales">Pesos de cada Divisa en los Componentes Principales</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusión</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduccion-del-numero-de-divisas-en-el-modelo">Reducción del Número de Divisas en el Modelo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-del-dataset-optimizado">Visualizacion del Dataset Optimizado</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-tendencia-general-y-estacionalidad">Análisis de Tendencia General y Estacionalidad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-descomposicion-stl-del-precio-del-oro">Interpretación de la Descomposición STL del Precio del Oro</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-del-analisis-de-descomposicion">Conclusiones del Análisis de Descomposición</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-autocorrelacion-y-retardo-acf-y-pacf">Análisis de Autocorrelación y Retardo (ACF y PACF)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-analisis-de-autocorrelacion-acf-y-autocorrelacion-parcial-pacf">Interpretación del Análisis de Autocorrelación (ACF) y Autocorrelación Parcial (PACF)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-del-analisis-de-acf-y-pacf">Conclusiones del Análisis de ACF y PACF</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verificacion-de-estacionariedad-en-las-series-de-tiempo">Verificación de Estacionariedad en las Series de Tiempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultados-de-las-pruebas-de-estacionariedad-adf-y-kpss">Resultados de las Pruebas de Estacionariedad (ADF y KPSS)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-adf">Prueba ADF</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-kpss">Prueba KPSS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-del-analisis-de-estacionariedad">Conclusiones del Análisis de Estacionariedad</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-volatilidad-y-variabilidad">Análisis de Volatilidad y Variabilidad</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-volatilidad-y-variabilidad-del-precio-del-oro">Interpretacion de Volatilidad y Variabilidad del Precio del Oro</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#volatilidad-movil">Volatilidad Móvil</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#coeficiente-de-variacion-movil-cv">Coeficiente de Variación Móvil (CV)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-del-analisis-de-volatilidad-y-variabilidad">Conclusiones del Análisis de Volatilidad y Variabilidad</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-finales-del-analisis-exploratorio-de-datos-eda">Conclusiones Finales del Análisis Exploratorio de Datos (EDA)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reduccion-del-numero-de-divisas">1. Reducción del Número de Divisas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tendencia-y-estacionalidad">2. Tendencia y Estacionalidad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#volatilidad-y-variabilidad">3. Volatilidad y Variabilidad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-estacionariedad-de-las-series">4. No Estacionariedad de las Series</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencia-temporal-autocorrelacion">5. Dependencia Temporal (Autocorrelación)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comentarios-finales">Comentarios Finales</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="analisis-y-modelado-predictivo-de-series-de-tiempo-aplicado-a-precios-historicos">
+<h1>Análisis y Modelado Predictivo de Series de Tiempo Aplicado a Precios Históricos<a class="headerlink" href="#analisis-y-modelado-predictivo-de-series-de-tiempo-aplicado-a-precios-historicos" title="Link to this heading">#</a></h1>
+<section id="introduccion">
+<h2>Introducción:<a class="headerlink" href="#introduccion" title="Link to this heading">#</a></h2>
+<p>Este proyecto tiene como objetivo principal realizar un análisis exhaustivo de series de tiempo basado en datos históricos de precios del oro diarios y anuales comprendidos entre 1985 y 2022. Se llevará a cabo un análisis inicial de los datos para identificar patrones importantes, como estacionalidades y tendencias, que nos permitirán entender mejor el comportamiento de los mismos.</p>
+<p>Posteriormente, se aplicarán modelos predictivos estadísticos tradicionales, como benchmarks, para comparar su rendimiento con un modelo personalizado, diseñado con el propósito de mejorar la precisión de las predicciones mediante el uso de nuevas estrategias. Este enfoque se centrará en usar técnicas como <strong>Holt-Winters</strong>, <strong>ARIMA</strong>, y redes neuronales básicas, que servirán de referencia para evaluar la eficacia del modelo original propuesto. La meta final es crear un modelo que no solo capture los patrones de la serie de tiempo y sus complejidades, sino que también sea más eficiente y preciso que los métodos tradicionales.</p>
+<section id="metodologia">
+<h3>Metodología:<a class="headerlink" href="#metodologia" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Exploración de Datos (EDA)</strong>:
+Se realizará un análisis exploratorio para identificar comportamientos generales de la serie de tiempo, analizando la tendencia, estacionalidad, y autocorrelación. Se utilizarán gráficos de líneas, ACF y PACF para entender mejor la estructura de los datos.</p></li>
+<li><p><strong>Modelos Benchmark</strong>:</p>
+<ul class="simple">
+<li><p><strong>Suavizado Exponencial</strong>: Utilizado para predecir valores basados en la tendencia a corto plazo.</p></li>
+<li><p><strong>Holt-Winters</strong>: Modelo que considera la tendencia y estacionalidad de los datos.</p></li>
+<li><p><strong>ARIMA</strong>: Modelo estadístico que combina autoregresión y medias móviles, apropiado para series estacionarias.</p></li>
+<li><p><strong>ANNs</strong>: Redes neuronales artificiales aplicadas para predecir el comportamiento de la serie.</p></li>
+</ul>
+</li>
+<li><p><strong>Modelo Personalizado</strong>:
+TBA</p></li>
+</ol>
+</section>
+</section>
+<section id="eda">
+<h2>EDA<a class="headerlink" href="#eda" title="Link to this heading">#</a></h2>
+<section id="analisis-exploratorio-de-datos-eda">
+<h3>Análisis Exploratorio de Datos (EDA)<a class="headerlink" href="#analisis-exploratorio-de-datos-eda" title="Link to this heading">#</a></h3>
+<p>En esta sección se realizara un análisis exploratorio del dataset <strong>Gold Rates 1985-Jan 2022</strong> el cual incluye dos bases,una con registros diarios de los precios del oro desde 1985 hasta febrero de 2022 y otra con promedios anuales de 1978 a 2021. Se exploraran las características de ambas, visualizando las tendencias, estacionalidades y fluctuaciones en los precios a lo largo del tiempo y se realizara un análisis estadístico para comprender mejor la estructura de los datos antes de comenzar a aplicar los modelos predictivos.</p>
+</section>
+<section id="carga-y-descripcion-de-los-datos">
+<h3>Carga y Descripción de los Datos<a class="headerlink" href="#carga-y-descripcion-de-los-datos" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Cargar el dataset diario y anual</span>
+<span class="n">daily_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;daily_gold_rate.csv&#39;</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">])</span>
+<span class="n">annual_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;annual_gold_rate.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Información sobre los datos diarios</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Datos Diarios:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">daily_data</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">daily_data</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># Información sobre los datos anuales</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Datos Anuales:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">annual_data</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">annual_data</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Datos Diarios:
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 10114 entries, 0 to 10113
+Data columns (total 7 columns):
+ #   Column  Non-Null Count  Dtype         
+---  ------  --------------  -----         
+ 0   Date    10114 non-null  datetime64[ns]
+ 1   USD     10114 non-null  float64       
+ 2   EUR     10114 non-null  float64       
+ 3   GBP     10114 non-null  float64       
+ 4   INR     10114 non-null  float64       
+ 5   AED     10114 non-null  float64       
+ 6   CNY     10110 non-null  float64       
+dtypes: datetime64[ns](1), float64(6)
+memory usage: 553.2 KB
+None
+        Date     USD     EUR     GBP      INR      AED    CNY
+0 1985-01-01  308.30  402.45  266.01  3825.85  1134.42    NaN
+1 1985-01-02  305.50  401.49  266.00  3787.05  1134.42    NaN
+2 1985-01-03  302.30  397.08  262.76  3718.88  1107.67    NaN
+3 1985-01-04  303.15  397.15  262.58  3759.64  1118.21    NaN
+4 1985-01-07  298.25  392.55  261.17  3741.23  1091.58  835.8
+
+Datos Anuales:
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 43 entries, 0 to 42
+Data columns (total 7 columns):
+ #   Column  Non-Null Count  Dtype  
+---  ------  --------------  -----  
+ 0   Date    43 non-null     object 
+ 1   USD     43 non-null     float64
+ 2   EUR     43 non-null     float64
+ 3   GBP     43 non-null     float64
+ 4   INR     43 non-null     float64
+ 5   AED     43 non-null     float64
+ 6   CNY     38 non-null     float64
+dtypes: float64(6), object(1)
+memory usage: 2.5+ KB
+None
+         Date     USD        EUR        GBP         INR         AED  CNY
+0  1980-12-31  614.50  378.19461  263.80259  4831.74943  2278.36795  NaN
+1  1981-12-31  459.26  360.90588  227.01948  3966.64790  1691.03194  NaN
+2  1982-12-31  375.30  345.59742  215.53232  3553.62680  1378.72895  NaN
+3  1983-12-30  423.66  439.89318  279.24936  4270.42821  1557.45790  NaN
+4  1984-12-31  360.78  425.91000  269.81553  4067.60433  1324.72272  NaN
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="descripcion-de-los-datos">
+<h3>Descripción de los Datos<a class="headerlink" href="#descripcion-de-los-datos" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>annual_gold_rate.csv</strong>: Este dataset contiene los precios anuales del oro desde 1980 hasta 2022, expresados las siguientes divisas USD, EUR, GBP, INR, AED, y CNY. Cada fila representa el precio de cierre el último día de cada año.</p>
+<ul>
+<li><p><strong>Observaciones</strong>: Aunque útil para análisis macroeconómicos, este dataset tiene un total de 43 registros, lo que innicialmente parece limitar su aplicabilidad para modelos predictivos de series de tiempo a corto plazo.</p></li>
+<li><p><strong>Valores Faltantes</strong>: Hay algunos valores faltantes en la columna <strong>CNY</strong> (5 valores faltantes).</p></li>
+</ul>
+</li>
+<li><p><strong>daily_gold_rate.csv</strong>: Este dataset registra los precios diarios del oro desde 1985 hasta 2022, proporcionando detalles sobre las fluctuaciones diarias en las mismas divisas mencionadas.</p>
+<ul>
+<li><p><strong>Observaciones</strong>: Contiene 10,114 registros con una gran granularidad que ofrece una representación precisa de las fluctuaciones diarias.Parece ser mas adecuado para análisis de series de tiempo debido a la cantidad de datos disponibles.</p></li>
+<li><p><strong>Valores Faltantes</strong>: El dataset contiene valores faltantes solo en la columna <strong>CNY</strong> (4 valores faltantes), mientras que las demás divisas tienen datos completos.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="visualizacion-de-los-datasets">
+<h2>Visualizacion de los Datasets<a class="headerlink" href="#visualizacion-de-los-datasets" title="Link to this heading">#</a></h2>
+<p>Debido a la diferencia en magnitudes de los precios del oro en las divisas encontradas en los datasets, se graficarán las series de tiempo con los precios normalizados, además de en sus magnitudes originales.</p>
+<section id="precios-anuales-del-oro-1980-2022">
+<h3>Precios Anuales del Oro (1980 - 2022)<a class="headerlink" href="#precios-anuales-del-oro-1980-2022" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="c1"># Normalizar los datos para que todas las divisas estén en la misma escala</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+<span class="n">scaled_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">annual_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">))</span>
+<span class="n">annual_data_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scaled_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">])</span>
+<span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span>
+
+<span class="c1"># Crear una figura con dos subgráficos</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+
+<span class="c1"># Graficar los precios originales</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gold&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;GBP&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;INR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;AED&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data</span><span class="p">[</span><span class="s1">&#39;CNY&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CNY&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Fecha&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Precio del Oro en Magnitud Original&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Precios Anuales del Oro en Magnitud Original (1980-2022)&#39;</span><span class="p">)</span>
+
+<span class="c1"># Graficar los precios normalizados</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gold&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;GBP&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;INR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;AED&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">annual_data_scaled</span><span class="p">[</span><span class="s1">&#39;CNY&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CNY&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Fecha&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Precio Normalizado del Oro&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Precios Anuales del Oro Normalizados (1980-2022)&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_152493/2678072057.py:7: FutureWarning: DataFrame.fillna with &#39;method&#39; is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+  scaled_data = scaler.fit_transform(annual_data[[&#39;USD&#39;, &#39;EUR&#39;, &#39;GBP&#39;, &#39;INR&#39;, &#39;AED&#39;, &#39;CNY&#39;]].fillna(method=&#39;ffill&#39;))
+</pre></div>
+</div>
+<img alt="_images/92f680938545ca067c09b5813752c3b8b5fa0d0c30a76b4de6083e81a57f21be.png" src="_images/92f680938545ca067c09b5813752c3b8b5fa0d0c30a76b4de6083e81a57f21be.png" />
+</div>
+</div>
+</section>
+<section id="precios-diarios-del-oro-1980-2022">
+<h3>Precios Diarios del Oro (1980 - 2022)<a class="headerlink" href="#precios-diarios-del-oro-1980-2022" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="c1"># Normalizar los datos para que todas las divisas estén en la misma escala</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+<span class="n">scaled_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">))</span>
+<span class="n">daily_data_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scaled_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">])</span>
+<span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span>
+
+<span class="c1"># Crear la figura con dos subgráficos</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+
+<span class="c1"># Graficar los precios originales</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gold&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;GBP&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;INR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;AED&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;CNY&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CNY&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Fecha&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Precio del Oro en Magnitud Original&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Precios Diarios del Oro en Magnitud Original (1985-2022)&#39;</span><span class="p">)</span>
+
+<span class="c1"># Graficar los precios normalizados</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gold&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;GBP&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;INR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;AED&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data_scaled</span><span class="p">[</span><span class="s1">&#39;CNY&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CNY&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Fecha&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Precio Normalizado del Oro&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Precios Diarios del Oro Normalizados (1985-2022)&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_152493/4216051286.py:7: FutureWarning: DataFrame.fillna with &#39;method&#39; is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+  scaled_data = scaler.fit_transform(daily_data[[&#39;USD&#39;, &#39;EUR&#39;, &#39;GBP&#39;, &#39;INR&#39;, &#39;AED&#39;, &#39;CNY&#39;]].fillna(method=&#39;ffill&#39;))
+</pre></div>
+</div>
+<img alt="_images/01de48be559e482541bd966c3cad2ffb308900f5bc91ad2d31af77de0b3df818.png" src="_images/01de48be559e482541bd966c3cad2ffb308900f5bc91ad2d31af77de0b3df818.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-graficas-de-precios-del-oro-1980-2022">
+<h3>Interpretación Gráficas de Precios del Oro (1980 - 2022)<a class="headerlink" href="#interpretacion-graficas-de-precios-del-oro-1980-2022" title="Link to this heading">#</a></h3>
+<p>Las gráficas muestran la evolución de los precios del oro en varias divisas (USD, EUR, GBP, INR, AED, y CNY) desde 1980 hasta 2022, con datos anuales y diarios. Se destacan las siguientes tendencias:</p>
+<ul class="simple">
+<li><p><strong>Tendencia general al alza</strong>: Los precios del oro muestran una tendencia creciente a lo largo del período en todas las monedas representadas, con algunas variaciones.</p></li>
+<li><p><strong>Incremento pronunciado en 2008-2012</strong>: Todas las divisas experimentaron un aumento significativo durante la crisis financiera global, reflejando la búsqueda de seguridad económica en el oro.</p></li>
+<li><p><strong>Diferencias en magnitud de precios</strong>: Los precios en <strong>INR</strong> tienen una escala mucho mayor que en otras monedas, al igual que <strong>AED</strong> y <strong>CNY</strong>, lo cual refleja tanto la diferencia en el valor relativo de las divisas debido a la inflación en países como India y China. Estas diferencias en magnitud hacen que los precios de estas divisas sean difíciles de comparar directamente con <strong>USD</strong>, <strong>EUR</strong>, y <strong>GBP</strong>. Debido a estas grandes diferencias en magnitudes, podría ser adecuado reducir la cantidad de divisas estudiadas en el modelo, ya que inicialmente parecen presentar tendencias muy similares, y estas diferencias de magnitud podrían dificultar la creación de los modelos o afectar su precisión.</p></li>
+<li><p><strong>Caída y recuperación en 2013-2020</strong>: Hubo una ligera disminución de los precios después de 2012, seguida por una recuperación en 2020, coincidiendo con la pandemia y el aumento de la incertidumbre causada por la paralización de varios sectores económicos.</p></li>
+</ul>
+</section>
+<section id="reduccion-a-una-unica-base">
+<h3>Reduccion a una unica base<a class="headerlink" href="#reduccion-a-una-unica-base" title="Link to this heading">#</a></h3>
+<p>Despues de observar inicialmente estos datasets se llego a la conclusion de que enfocar el estudio en las base de precios <a class="reference external" href="http://diaros.La">diaros.La</a> reducción a una única base se justifica debido a la limitada cantidad de entradas econtradas en el datset de precios anuales del oro, que contiene solo 43 registros. Este tamaño de muestra no es adecuado para el entrenamiento de los modelos que se planean implementar, ya que la falta de datos limita la capacidad de los modelo para aprender patrones complejos y generalizar correctamente.Ademas de que las tendencias y estacionalidad se presenta de la misma manera en los dos datasets por lo se espera que la base de precios diarios que ofrece una mayor cantidad de entradas sera mas adecuada para entrenar modelos robustos y precisos.</p>
+</section>
+</section>
+<section id="difrenciacion-de-las-variables-y-analisis-de-tendecia">
+<h2>Difrenciacion de las variables y analisis de tendecia<a class="headerlink" href="#difrenciacion-de-las-variables-y-analisis-de-tendecia" title="Link to this heading">#</a></h2>
+<section id="matriz-de-correlacion-entre-las-divisas-1985-2022">
+<h3>Matriz de Correlación entre las Divisas (1985-2022)<a class="headerlink" href="#matriz-de-correlacion-entre-las-divisas-1985-2022" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Calcular la matriz de correlación entre las monedas</span>
+<span class="n">correlation_matrix</span> <span class="o">=</span> <span class="n">daily_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+
+<span class="c1"># Visualizar la matriz de correlación usando un mapa de calor</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">correlation_matrix</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Matriz de Correlación entre las Divisas (1985-2022)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/3ed8f7621f1d9c4eacf709c1314f0bdc02889f7d4ef3ab34e9f9af8371a9db51.png" src="_images/3ed8f7621f1d9c4eacf709c1314f0bdc02889f7d4ef3ab34e9f9af8371a9db51.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-de-la-matriz-de-correlacion-entre-las-divisas-1985-2022">
+<h3>Interpretación de la Matriz de Correlación entre las Divisas (1985-2022)<a class="headerlink" href="#interpretacion-de-la-matriz-de-correlacion-entre-las-divisas-1985-2022" title="Link to this heading">#</a></h3>
+<p>La matriz de correlación muestra relaciones muy estrechas entre las distintas divisas a lo largo del período analizado:</p>
+<ul class="simple">
+<li><p><strong>USD</strong>, <strong>EUR</strong>, <strong>GBP</strong>, e <strong>INR</strong> presentan correlaciones extremadamente altas, todas superiores a <strong>0.97</strong>. Esto indica que las fluctuaciones en los precios del oro en estas monedas siguen patrones muy similares.</p></li>
+<li><p><strong>AED</strong> y <strong>CNY</strong> también muestran correlaciones muy altas con <strong>USD</strong> y <strong>EUR</strong> , con coeficientes que se asemejan o representan a una correlacion positiva perfecta <strong>0.97-1.0</strong>.</p></li>
+</ul>
+<p>Estas correlaciones tan altas indican que incluir todas las monedas en el modelo podría introducir <strong>redundancia</strong> en el análisis, ya que varias de las divisas se mueven de manera casi idéntica. Esta información justifica la reducción a trabajar únicamente con <strong>USD</strong> y <strong>EUR</strong>, ya que estas divisas son suficientemente representativas del comportamiento general del precio del oro, sin perder información significativa. Además, la reducción podría simplificar el modelo y mejorar su <strong>eficiencia</strong> sin comprometer la <strong>precisión</strong> en la predicción de los precios.</p>
+</section>
+</section>
+<section id="analisis-del-coeficiente-de-variacion-y-componentes-principales">
+<h2>Análisis del Coeficiente de Variación y Componentes Principales<a class="headerlink" href="#analisis-del-coeficiente-de-variacion-y-componentes-principales" title="Link to this heading">#</a></h2>
+<p>Para verificar si es correcta una <strong>reducción en el número de divisas consideradas en el análisis</strong>,se realizar un <strong>análisis de los coeficientes de variación</strong> y aplicar el <strong>PCA</strong>. Esto permitirá determinar si realmente existe una diferencia significativa entre analizar todas las divisas o un subconjunto de ellas y si esta reducción afectará significativamente al los modelos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Calcular el Coeficiente de Variación (CV) para cada divisa</span>
+<span class="n">cv_values</span> <span class="o">=</span> <span class="n">daily_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">/</span> <span class="n">daily_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coeficiente de Variación (CV) para cada divisa:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cv_values</span><span class="p">)</span>
+
+<span class="c1"># Aplicar Análisis de Componentes Principales (PCA) y Llenar los valores faltantes con el método de forward fill</span>
+<span class="n">scaled_data</span> <span class="o">=</span> <span class="n">daily_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span>
+<span class="n">scaled_data</span> <span class="o">=</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">scaled_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">scaled_data</span> <span class="o">-</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">()</span>
+<span class="n">principal_components</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">scaled_data</span><span class="p">)</span>
+
+<span class="c1"># Explicación de la varianza</span>
+<span class="n">explained_variance</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Porcentaje de varianza explicada por cada componente principal:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">variance</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">explained_variance</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Componente Principal </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variance</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+
+<span class="c1"># Pesos de cada divisa en los componentes principales</span>
+<span class="n">loadings</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">components_</span>
+<span class="n">loadings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">loadings</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;GBP&#39;</span><span class="p">,</span> <span class="s1">&#39;INR&#39;</span><span class="p">,</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="s1">&#39;CNY&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Pesos (Loadings) de cada divisa en los Componentes Principales:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">loadings_df</span><span class="p">)</span>
+
+<span class="c1"># Graficar la varianza explicada acumulada</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">explained_variance</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Número de Componentes Principales&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Varianza Explicada Acumulada (%)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Varianza Explicada Acumulada por los Componentes Principales&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Coeficiente de Variación (CV) para cada divisa:
+USD    0.681454
+EUR    0.691313
+GBP    0.773009
+INR    0.992150
+AED    0.681540
+CNY    0.689569
+dtype: float64
+
+Porcentaje de varianza explicada por cada componente principal:
+Componente Principal 1: 98.45%
+Componente Principal 2: 0.89%
+Componente Principal 3: 0.47%
+Componente Principal 4: 0.13%
+Componente Principal 5: 0.06%
+Componente Principal 6: 0.00%
+
+Pesos (Loadings) de cada divisa en los Componentes Principales:
+        USD       EUR       GBP       INR       AED       CNY
+0  0.408954  0.409236  0.409209  0.406475  0.408954  0.406651
+1 -0.422031  0.319681  0.307933  0.568690 -0.422185 -0.351030
+2 -0.267871 -0.308795 -0.267071  0.377805 -0.267139  0.739908
+3  0.278025 -0.205069 -0.553666  0.589949  0.278215 -0.385563
+4 -0.075145  0.770014 -0.599877 -0.143503 -0.075473  0.123653
+5 -0.707069  0.000401  0.000106 -0.000247  0.707145 -0.000341
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_152493/3992318955.py:12: FutureWarning: DataFrame.fillna with &#39;method&#39; is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+  scaled_data = daily_data[[&#39;USD&#39;, &#39;EUR&#39;, &#39;GBP&#39;, &#39;INR&#39;, &#39;AED&#39;, &#39;CNY&#39;]].fillna(method=&#39;ffill&#39;)
+</pre></div>
+</div>
+<img alt="_images/b63522c299492254324ef09b549c257ac60770b978c6c0e49af29485698b75f2.png" src="_images/b63522c299492254324ef09b549c257ac60770b978c6c0e49af29485698b75f2.png" />
+</div>
+</div>
+<section id="interpretacion-del-analisis-del-coeficiente-de-variacion-cv-y-pca">
+<h3>Interpretación del Análisis del Coeficiente de Variación (CV) y PCA<a class="headerlink" href="#interpretacion-del-analisis-del-coeficiente-de-variacion-cv-y-pca" title="Link to this heading">#</a></h3>
+<section id="coeficiente-de-variacion-cv">
+<h4>Coeficiente de Variación (CV)<a class="headerlink" href="#coeficiente-de-variacion-cv" title="Link to this heading">#</a></h4>
+<p>El <strong>Coeficiente de Variación (CV)</strong> mide la <strong>volatilidad relativa</strong> de cada divisa respecto a su media:</p>
+<ul class="simple">
+<li><p><strong>INR</strong> tiene el CV más alto (<strong>0.99</strong>), indicando una mayor volatilidad en comparación con las demás divisas.</p></li>
+<li><p><strong>GBP</strong> también presenta un CV relativamente alto (<strong>0.77</strong>), lo cual sugiere cierta volatilidad adicional en comparación con las demás.</p></li>
+<li><p><strong>USD</strong>, <strong>EUR</strong>, <strong>AED</strong>, y <strong>CNY</strong> presentan valores de CV similares (<strong>0.68-0.69</strong>), lo cual indica que estas divisas presentan mayor estabilidad y podrian ser mas adecuadas para los modelos.</p></li>
+</ul>
+</section>
+<section id="varianza-explicada-por-los-componentes-principales">
+<h4>Varianza Explicada por los Componentes Principales<a class="headerlink" href="#varianza-explicada-por-los-componentes-principales" title="Link to this heading">#</a></h4>
+<p>El <strong>Análisis de Componentes Principales (PCA)</strong> proporciona la varianza explicada por cada componente:</p>
+<ul class="simple">
+<li><p>El <strong>Componente Principal 1 (CP1)</strong> explica el <strong>98.45%</strong> de la varianza total lo que  indica la gran mayoria de la variabilidad de los precios del oro en puede ser capturada por este componente.</p></li>
+<li><p>Los <strong>componentes restantes</strong> explican una fracción muy pequeña de la varianza (menos del <strong>2%</strong>),esto indica que su contribución es marginal.</p></li>
+</ul>
+</section>
+<section id="pesos-de-cada-divisa-en-los-componentes-principales">
+<h4>Pesos de cada Divisa en los Componentes Principales<a class="headerlink" href="#pesos-de-cada-divisa-en-los-componentes-principales" title="Link to this heading">#</a></h4>
+<p>Los <strong>pesos</strong> de cada divisa en los componentes principales muestran la contribución de cada una:</p>
+<ul class="simple">
+<li><p>En el <strong>CP1</strong>, los pesos de todas las divisas son muy similares (<strong>0.408-0.409</strong>), lo cual indica que este componente es una <strong>combinación balanceada</strong> de todas las divisas.</p></li>
+<li><p>Los <strong>componentes secundarios</strong> tienen pesos más variados, indicando que estas combinaciones lineales capturan variaciones específicas de ciertas divisas pero de debido a su contribución a la varianza total esto no parece ser relevante.</p></li>
+</ul>
+</section>
+<section id="conclusion">
+<h4>Conclusión<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h4>
+<p>El <strong>CP1</strong> explica la gran mayoría de la varianza de los precios del oro y tiene una combinación muy equilibrada de todas las divisas. Esto indica que <strong>reducir el análisis a solo una o dos divisas</strong> sería suficiente para capturar la mayoría de la información relevante, sin perder precisión en el modelo. Los otros componentes tienen un impacto marginal, y los pesos similares entre las divisas en el <strong>CP1</strong> justifican la reducción de las divisas sin pérdida significativa de información.</p>
+</section>
+</section>
+</section>
+<section id="reduccion-del-numero-de-divisas-en-el-modelo">
+<h2>Reducción del Número de Divisas en el Modelo<a class="headerlink" href="#reduccion-del-numero-de-divisas-en-el-modelo" title="Link to this heading">#</a></h2>
+<p>Después de realizar un análisis exhaustivo utilizando <strong>correlación</strong>, <strong>Análisis de Componentes Principales (PCA)</strong>, y evaluar los <strong>pesos (loadings)</strong> de cada divisa en los componentes principales,se justifica la reducción del número de divisas consideradas en el modelo a solo <strong>USD</strong> y <strong>EUR</strong>:</p>
+<ul class="simple">
+<li><p><strong>Alta Correlación</strong>: Las divisas analizadas (USD, EUR, GBP, INR, AED, CNY) presentan una <strong>correlación extremadamente alta</strong>, lo cual indica que se comportan de manera muy similar. Esto sugiere que incluir todas las divisas introduciría <strong>redundancia</strong> sin añadir información significativa adicional.</p></li>
+<li><p><strong>PCA</strong>: El <strong>Componente Principal 1 (CP1)</strong> explica <strong>98.45%</strong> de la variabilidad total de los datos, y los pesos asociados a este componente son prácticamente iguales para todas las divisas.</p></li>
+<li><p><strong>Pesos Uniformes en el CP1</strong>: Los <strong>pesos</strong> de todas las divisas en el <strong>CP1</strong> son similares, lo cual refuerza la idea de que no hay una divisa que domine la explicación de la variabilidad. Esto permite justificar el uso de <strong>cualquiera de las divisas</strong> para representar el comportamiento del precio del oro.</p></li>
+<li><p><strong>Representatividad del Mercado</strong>: El proyecto por lo tanto se enfocara en <strong>USD</strong> y <strong>EUR</strong>, ya que además de su <strong>alta representatividad</strong> en el mercado mundial, el análisis de estas divisas es el más interesante desde el punto de vista de <strong>Macroeconomico</strong>. Tanto el USD como el EUR tienen un papel crucial en el comercio internacional, lo cual los convierte en indicadores relevantes para los precios del oro.</p></li>
+</ul>
+<p>Por estas razones, se prodera a <strong>reducir el número de divisas</strong> consideradas en el modelo a solo <strong>USD</strong> y <strong>EUR</strong>, lo cual simplificará el análisis sin comprometer la <strong>precisión</strong> de los modelos.</p>
+<section id="visualizacion-del-dataset-optimizado">
+<h3>Visualizacion del Dataset Optimizado<a class="headerlink" href="#visualizacion-del-dataset-optimizado" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Graficar la serie de tiempo con la base reducida (USD y EUR)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="c1"># Graficar USD y EUR</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">daily_data</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Configurar etiquetas y título</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Fecha&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Precio del Oro&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Precios Diarios del Oro en USD y EUR (1985-2022)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/e337fb0338f7bd37c6b05e48b7fc531fddfc41749e2ae239e6ba85cfe6e845d5.png" src="_images/e337fb0338f7bd37c6b05e48b7fc531fddfc41749e2ae239e6ba85cfe6e845d5.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="analisis-de-tendencia-general-y-estacionalidad">
+<h2>Análisis de Tendencia General y Estacionalidad<a class="headerlink" href="#analisis-de-tendencia-general-y-estacionalidad" title="Link to this heading">#</a></h2>
+<p>Habiendo realizado una depuración y optimización de las base de datos, se procedera a analizar más detalladamente la nueva base. Uno de los primeros pasos que a tomar para identificar factores importantes para la creación de los modelos es descomponer la serie de tiempo en sus componentes de <strong>tendencia</strong>, <strong>estacionalidad</strong>, y <strong>residuo</strong>.</p>
+<p>Utilizando el método <strong>STL (Seasonal and Trend decomposition using Loess)</strong> para analizar los precios del oro en <strong>USD</strong> y <strong>EUR</strong>, lo que permitirá identificar la tendencia sostenida y los patrones estacionales presentes en los datos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">statsmodels.tsa.seasonal</span> <span class="kn">import</span> <span class="n">STL</span>
+
+<span class="c1"># Crear una nueva variable para la descomposición</span>
+<span class="n">data_stl</span> <span class="o">=</span> <span class="n">daily_data</span><span class="p">[[</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">daily_data_op</span> <span class="o">=</span> <span class="n">daily_data</span><span class="p">[[</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="c1"># Establecer la fecha como índice</span>
+<span class="n">data_stl</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Aplicar la descomposición STL para USD</span>
+<span class="n">stl_usd</span> <span class="o">=</span> <span class="n">STL</span><span class="p">(</span><span class="n">data_stl</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="n">seasonal</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Aplicar la descomposición STL para EUR</span>
+<span class="n">stl_eur</span> <span class="o">=</span> <span class="n">STL</span><span class="p">(</span><span class="n">data_stl</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="n">seasonal</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Graficar la descomposición para USD</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Descomposición STL del Precio del Oro en USD&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stl_usd</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Serie Original (USD)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stl_usd</span><span class="o">.</span><span class="n">trend</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Tendencia (USD)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stl_usd</span><span class="o">.</span><span class="n">seasonal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Estacionalidad (USD)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stl_usd</span><span class="o">.</span><span class="n">resid</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Residuo (USD)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Graficar la descomposición para EUR</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Descomposición STL del Precio del Oro en EUR&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stl_eur</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Serie Original (EUR)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stl_eur</span><span class="o">.</span><span class="n">trend</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Tendencia (EUR)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stl_eur</span><span class="o">.</span><span class="n">seasonal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Estacionalidad (EUR)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stl_eur</span><span class="o">.</span><span class="n">resid</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Residuo (EUR)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/783950c4fb5b8bdf3e986f0711c356ddda63a2c7136e22e639ebbc4185f8682b.png" src="_images/783950c4fb5b8bdf3e986f0711c356ddda63a2c7136e22e639ebbc4185f8682b.png" />
+<img alt="_images/713c947c9951989afb8eaee108b70b99442a694254cfe366f35d658245486b1c.png" src="_images/713c947c9951989afb8eaee108b70b99442a694254cfe366f35d658245486b1c.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-de-la-descomposicion-stl-del-precio-del-oro">
+<h2>Interpretación de la Descomposición STL del Precio del Oro<a class="headerlink" href="#interpretacion-de-la-descomposicion-stl-del-precio-del-oro" title="Link to this heading">#</a></h2>
+<p>Después de realizar la descomposición de la serie de tiempo de los precios del oro en <strong>USD</strong> y <strong>EUR</strong> utilizando el método <strong>STL</strong>, se identifican los siguientes componentes clave:</p>
+<ul class="simple">
+<li><p><strong>Tendencia General</strong>: Como se mencionó en las observaciones iniciales, la <strong>tendencia</strong> muestra un <strong>aumento significativo</strong> a partir del año 2005 en ambas divisas, alcanzando un máximo alrededor de 2011-2012. Esto coincide con el período de crisis financiera global, lo cual sugiere que el oro actuó como <strong>activo refugio</strong> en ese contexto. Posteriormente, se observa una ligera disminución, seguida por una nueva recuperación a partir de 2019-2020, probablemente como respuesta a la incertidumbre generada por la pandemia de COVID-19.</p></li>
+<li><p><strong>Estacionalidad</strong>: La <strong>estacionalidad</strong> presenta fluctuaciones cíclicas que no parecen tener una <strong>amplitud significativa</strong> en comparación con la tendencia. Esto indica que el oro no sigue un patrón estacional claro o recurrente a lo largo de los años, sino que su comportamiento estacional es moderado e influenciado por factores externos no siempre periódicos.</p></li>
+<li><p><strong>Residuo (Componente Aleatorio)</strong>: El componente <strong>residual</strong> refleja un comportamiento más errático, especialmente a partir de 2005, con <strong>picos de volatilidad</strong> que coinciden con eventos económicos significativos, como la crisis de 2008 y la pandemia de 2020. Estos picos en el residuo reflejan la <strong>alta volatilidad</strong> e incertidumbre en estos períodos.</p></li>
+</ul>
+<section id="conclusiones-del-analisis-de-descomposicion">
+<h3>Conclusiones del Análisis de Descomposición<a class="headerlink" href="#conclusiones-del-analisis-de-descomposicion" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Tendencia Dominante</strong>: El componente de <strong>tendencia</strong> es el más relevante, mostrando un crecimiento constante en el precio del oro y movimientos repentinos que coinciden con momentos de <strong>alta incertidumbre</strong> económica.</p></li>
+<li><p><strong>Estacionalidad Moderada</strong>: La <strong>estacionalidad</strong> tiene un impacto relativamente menor, lo cual implica que el oro no está fuertemente influenciado por patrones cíclicos estacionales.</p></li>
+<li><p><strong>Alta Volatilidad en el Residuo</strong>: Los picos en el <strong>residuo</strong> indican períodos de <strong>alta volatilidad</strong> que no pueden ser explicados por la tendencia o la estacionalidad. Esto es importante al considerar la modelación, ya que estos factores aleatorios representan el impacto de eventos macroeconómicos inesperados.</p></li>
+</ul>
+<p>En resumen, el análisis muestra que el precio del oro está fuertemente influenciado por eventos globales que generan <strong>incertidumbre económica</strong>, con una tendencia clara de crecimiento en momentos críticos y una estacionalidad que, aunque presente, tiene un papel menor.</p>
+</section>
+</section>
+<section id="analisis-de-autocorrelacion-y-retardo-acf-y-pacf">
+<h2>Análisis de Autocorrelación y Retardo (ACF y PACF)<a class="headerlink" href="#analisis-de-autocorrelacion-y-retardo-acf-y-pacf" title="Link to this heading">#</a></h2>
+<p>Para evaluar la <strong>dependencia temporal</strong> de los precios del oro en se analizaran las funciones de <strong>autocorrelación (ACF)</strong> y <strong>autocorrelación parcial (PACF)</strong>. Estos gráficos nos permitirán identificar patrones repetitivos y determinar la duración de los mismos, lo cual es esencial para la construcción de modelos de predicción como <strong>ARIMA</strong>.</p>
+<p>La <strong>ACF</strong> nos permite evaluar cómo los valores de la serie se correlacionan con sus valores pasados, mientras que la <strong>PACF</strong> muestra la correlación directa de un valor con sus rezagos, excluyendo la influencia de los otros rezagos intermedios.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+
+<span class="c1"># ACF y PACF para USD</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="n">lags</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">plot_pacf</span><span class="p">(</span><span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="n">lags</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Función de Autocorrelación (ACF) - Precio del Oro en USD&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Función de Autocorrelación Parcial (PACF) - Precio del Oro en USD&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># ACF y PACF para EUR</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="n">lags</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">plot_pacf</span><span class="p">(</span><span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="n">lags</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Función de Autocorrelación (ACF) - Precio del Oro en EUR&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Función de Autocorrelación Parcial (PACF) - Precio del Oro en EUR&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/09e68ae7318441d088e6d245ee7c9d7ba25dac7fb2aa1cdc0eea3bc3882452b3.png" src="_images/09e68ae7318441d088e6d245ee7c9d7ba25dac7fb2aa1cdc0eea3bc3882452b3.png" />
+<img alt="_images/f7a11e958c577efc23e7e79a7743a8bfd3e74b18886986928d0bfe0b379a44fd.png" src="_images/f7a11e958c577efc23e7e79a7743a8bfd3e74b18886986928d0bfe0b379a44fd.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-del-analisis-de-autocorrelacion-acf-y-autocorrelacion-parcial-pacf">
+<h2>Interpretación del Análisis de Autocorrelación (ACF) y Autocorrelación Parcial (PACF)<a class="headerlink" href="#interpretacion-del-analisis-de-autocorrelacion-acf-y-autocorrelacion-parcial-pacf" title="Link to this heading">#</a></h2>
+<p>Tras analizar las gráficas de <strong>Autocorrelación (ACF)</strong> y <strong>Autocorrelación Parcial (PACF)</strong> de los precios del oro en <strong>USD</strong> y <strong>EUR</strong>, se puede destacar lo siguiente:</p>
+<ul class="simple">
+<li><p><strong>Función de Autocorrelación (ACF)</strong>: La gráfica de <strong>ACF</strong> muestra una <strong>disminución lenta</strong> a medida que los lags avanzan, lo cual indica la presencia de una <strong>dependencia de largo plazo</strong> en la serie. Este comportamiento es típico de series que presentan una <strong>tendencia</strong> persistente, lo cual sugiere que los valores actuales de los precios del oro dependen significativamente de los valores pasados.</p></li>
+<li><p><strong>Función de Autocorrelación Parcial (PACF)</strong>: La <strong>PACF</strong> muestra una <strong>caída abrupta</strong> después del primer lag, lo cual sugiere que la <strong>influencia principal</strong> en los precios actuales del oro proviene de los valores inmediatamente anteriores. Esto indica que, para modelar la serie, un componente de bajo orden podría ser suficiente para capturar la dependencia a corto plazo.</p></li>
+</ul>
+<section id="conclusiones-del-analisis-de-acf-y-pacf">
+<h3>Conclusiones del Análisis de ACF y PACF<a class="headerlink" href="#conclusiones-del-analisis-de-acf-y-pacf" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Tendencia Persistente</strong>: La <strong>ACF</strong> muestra que existe una <strong>tendencia significativa</strong> en los precios del oro tanto en <strong>USD</strong> como en <strong>EUR</strong>, lo cual confirma la necesidad de tratar la tendencia antes de modelar la serie.</p></li>
+<li><p><strong>Modelo Sugerido</strong>: La <strong>caída abrupta</strong> en la <strong>PACF</strong> sugiere que un modelo autorregresivo de bajo orden sería adecuado para capturar la estructura de dependencia en los datos. Sin embargo, la presencia de una tendencia en la ACF sugiere que también será necesaria una <strong>diferenciación</strong> para hacer la serie <strong>estacionaria</strong> antes de aplicar modelos como ARIMA.</p></li>
+</ul>
+<p>En resumen, el análisis muestra una clara <strong>dependencia temporal</strong> en los precios del oro, que podría ser modelada mediante un enfoque <strong>ARIMA</strong>, considerando antes la necesidad de diferenciación para abordar la tendencia y un componente autorregresivo de bajo orden para capturar las relaciones a corto plazo.</p>
+</section>
+</section>
+<section id="verificacion-de-estacionariedad-en-las-series-de-tiempo">
+<h2>Verificación de Estacionariedad en las Series de Tiempo<a class="headerlink" href="#verificacion-de-estacionariedad-en-las-series-de-tiempo" title="Link to this heading">#</a></h2>
+<p>Para poder modelar adecuadamente la serie de tiempo de los precios del oro en <strong>USD</strong> y <strong>EUR</strong>, es necesario verificar si estas son <strong>estacionarias</strong>. La estacionariedad implica que las propiedades estadísticas, como la <strong>media</strong> y la <strong>varianza</strong>, se mantienen constantes a lo largo del tiempo.</p>
+<p>Para esto se aplicarán dos pruebas: <strong>ADF (Augmented Dickey-Fuller)</strong> y <strong>KPSS</strong>. La prueba <strong>ADF</strong> se utiliza para determinar si podemos rechazar la hipótesis nula de que la serie no es estacionaria, mientras que la prueba <strong>KPSS</strong> verifica si podemos aceptar o rechazar la hipótesis nula de estacionariedad.
+Si las series no son estacionarias, será necesario aplicar una transformación, como la <strong>diferenciación</strong>, antes de proceder con el modelado en ciertos modelos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">statsmodels.tsa.stattools</span> <span class="kn">import</span> <span class="n">adfuller</span><span class="p">,</span> <span class="n">kpss</span>
+
+<span class="c1"># Prueba ADF para USD y EUR</span>
+<span class="k">def</span> <span class="nf">adf_test</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">currency</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">adfuller</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Prueba ADF para </span><span class="si">{</span><span class="n">currency</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Estadístico ADF: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Valor p: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resultado: Serie Estacionaria&#39;</span> <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span> <span class="k">else</span> <span class="s1">&#39;Resultado: Serie No Estacionaria&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Prueba KPSS para USD y EUR</span>
+<span class="k">def</span> <span class="nf">kpss_test</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">currency</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">kpss</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Prueba KPSS para </span><span class="si">{</span><span class="n">currency</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Estadístico KPSS: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Valor p: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resultado: Serie Estacionaria&#39;</span> <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.05</span> <span class="k">else</span> <span class="s1">&#39;Resultado: Serie No Estacionaria&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Realizar las pruebas para USD y EUR</span>
+<span class="n">adf_test</span><span class="p">(</span><span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="s1">&#39;USD&#39;</span><span class="p">)</span>
+<span class="n">kpss_test</span><span class="p">(</span><span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">],</span> <span class="s1">&#39;USD&#39;</span><span class="p">)</span>
+<span class="n">adf_test</span><span class="p">(</span><span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="s1">&#39;EUR&#39;</span><span class="p">)</span>
+<span class="n">kpss_test</span><span class="p">(</span><span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">],</span> <span class="s1">&#39;EUR&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prueba ADF para USD:
+Estadístico ADF: 0.08926533923192043
+Valor p: 0.965320500541408
+Resultado: Serie No Estacionaria
+
+Prueba KPSS para USD:
+Estadístico KPSS: 13.770322980621593
+Valor p: 0.01
+Resultado: Serie No Estacionaria
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_152493/1974238168.py:14: InterpolationWarning: The test statistic is outside of the range of p-values available in the
+look-up table. The actual p-value is smaller than the p-value returned.
+
+  result = kpss(series, regression=&#39;c&#39;)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prueba ADF para EUR:
+Estadístico ADF: 1.0861413502132413
+Valor p: 0.9950965917581289
+Resultado: Serie No Estacionaria
+
+Prueba KPSS para EUR:
+Estadístico KPSS: 13.739901718940565
+Valor p: 0.01
+Resultado: Serie No Estacionaria
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_152493/1974238168.py:14: InterpolationWarning: The test statistic is outside of the range of p-values available in the
+look-up table. The actual p-value is smaller than the p-value returned.
+
+  result = kpss(series, regression=&#39;c&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="resultados-de-las-pruebas-de-estacionariedad-adf-y-kpss">
+<h2>Resultados de las Pruebas de Estacionariedad (ADF y KPSS)<a class="headerlink" href="#resultados-de-las-pruebas-de-estacionariedad-adf-y-kpss" title="Link to this heading">#</a></h2>
+<p>Después de aplicar las pruebas <strong>ADF</strong> y <strong>KPSS</strong> se obtuvieron los siguientes resultados:</p>
+<section id="prueba-adf">
+<h3>Prueba ADF<a class="headerlink" href="#prueba-adf" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>USD</strong>: El <strong>estadístico ADF</strong> es 0.089, y el <strong>valor p</strong> es 0.965. Esto indica que no podemos rechazar la hipótesis nula de <strong>no estacionariedad</strong>, lo cual sugiere que la serie en <strong>USD</strong> <strong>no es estacionaria</strong>.</p></li>
+<li><p><strong>EUR</strong>: El <strong>estadístico ADF</strong> es 1.086, y el <strong>valor p</strong> es 0.995. Al igual que en el caso del USD, no podemos rechazar la hipótesis nula,esto sugiere que la serie en <strong>EUR</strong> <strong>no es estacionaria</strong>.</p></li>
+</ul>
+</section>
+<section id="prueba-kpss">
+<h3>Prueba KPSS<a class="headerlink" href="#prueba-kpss" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>USD</strong>: El <strong>estadístico KPSS</strong> es 13.770, con un <strong>valor p</strong> de 0.01. Por lo tanto se rechaza la hipótesis nula de <strong>estacionariedad</strong>, confirmando que la serie en <strong>USD</strong> <strong>no es estacionaria</strong>.</p></li>
+<li><p><strong>EUR</strong>: El <strong>estadístico KPSS</strong> es 13.739, con un <strong>valor p</strong> de 0.01. Al igual que en el caso del USD, rechazamos la hipótesis nula de estacionariedad, lo cual tambien confirma que la serie en <strong>EUR</strong> <strong>no es estacionaria</strong>.</p></li>
+</ul>
+</section>
+<section id="conclusiones-del-analisis-de-estacionariedad">
+<h3>Conclusiones del Análisis de Estacionariedad<a class="headerlink" href="#conclusiones-del-analisis-de-estacionariedad" title="Link to this heading">#</a></h3>
+<p>Ambas pruebas, tanto <strong>ADF</strong> como <strong>KPSS</strong>, muestran consistentemente que las series de precios del oro en <strong>USD</strong> y <strong>EUR</strong> <strong>no son estacionarias</strong>. Esto implica que existen tendencias o variaciones que cambian con el tiempo y que la <strong>media y varianza</strong> no son constantes.</p>
+<p>Para poder proceder con ciertos modelos, será necesario <strong>transformar las series</strong> para hacerlas estacionarias. lo cual se podria lograr con metodos como la <strong>diferenciación</strong>, que permitiria eliminar la tendencia y estabilizar la media y varianza de la serie.</p>
+</section>
+</section>
+<section id="analisis-de-volatilidad-y-variabilidad">
+<h2>Análisis de Volatilidad y Variabilidad<a class="headerlink" href="#analisis-de-volatilidad-y-variabilidad" title="Link to this heading">#</a></h2>
+<p>Para analizar la <strong>volatilidad</strong> de los precios del oro, se calculará la <strong>desviación estándar móvil</strong> y el <strong>coeficiente de variación (CV)</strong> a lo largo del tiempo, tanto para <strong>USD</strong> como para <strong>EUR</strong>. La <strong>desviación estándar móvil</strong> nos permitirá observar cómo cambia la volatilidad de los precios del oro en diferentes períodos, mientras que el <strong>coeficiente de variación</strong> ayudará a evaluar la <strong>variabilidad relativa</strong> respecto a la media.</p>
+<p>Este análisis ayudara identificar períodos de <strong>alta o baja volatilidad</strong>, lo que puede confirmar que estos movimientos coincide con momentos de <strong>incertidumbre económica</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Crear un nuevo DataFrame para los cálculos de volatilidad y coeficiente de variación</span>
+<span class="n">volatility_data</span> <span class="o">=</span> <span class="n">daily_data_op</span><span class="p">[[</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Calcular la desviación estándar móvil para USD y EUR con una ventana de 30 días</span>
+<span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;USD_volatility&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;EUR_volatility&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="c1"># Calcular el coeficiente de variación móvil para USD y EUR (Desviación estándar / Media) con una ventana de 30 días</span>
+<span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;USD_cv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;USD_volatility&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;EUR_cv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;EUR_volatility&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">daily_data_op</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># Graficar la volatilidad y el coeficiente de variación asegurándose de que &#39;Date&#39; esté presente</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Gráfica de volatilidad</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;USD_volatility&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Volatilidad USD&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;EUR_volatility&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Volatilidad EUR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Desviación Estándar Móvil&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Volatilidad Móvil del Precio del Oro (USD y EUR)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Gráfica del coeficiente de variación</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;USD_cv&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CV USD&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">volatility_data</span><span class="p">[</span><span class="s1">&#39;EUR_cv&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CV EUR&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Fecha&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Coeficiente de Variación&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Coeficiente de Variación Móvil del Precio del Oro (USD y EUR)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/0fbf47046101199c1cdc6f902b8916ca084da3a28b86faae14f02b2579c76ffa.png" src="_images/0fbf47046101199c1cdc6f902b8916ca084da3a28b86faae14f02b2579c76ffa.png" />
+</div>
+</div>
+<section id="interpretacion-de-volatilidad-y-variabilidad-del-precio-del-oro">
+<h3>Interpretacion de Volatilidad y Variabilidad del Precio del Oro<a class="headerlink" href="#interpretacion-de-volatilidad-y-variabilidad-del-precio-del-oro" title="Link to this heading">#</a></h3>
+<section id="volatilidad-movil">
+<h4>Volatilidad Móvil<a class="headerlink" href="#volatilidad-movil" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>La <strong>volatilidad</strong> del precio del oro en USD y EUR muestra un patrón muy similar a lo largo del tiempo. A partir del año <strong>2005</strong>, se observa un incremento significativo en la volatilidad, con <strong>picos notorios</strong> que coinciden con eventos económicos importantes, como la <strong>crisis financiera global de 2008</strong> y la <strong>pandemia de COVID-19 en 2020</strong>.</p></li>
+<li><p>Las gráficas de volatilidad muestran cómo el comportamiento de ambas divisas se mantiene alineado, con variaciones que sugieren una respuesta conjunta a eventos macroeconómicos. Esto refuerza la idea de que estas dos divisas representan adecuadamente el comportamiento global del precio del oro.</p></li>
+</ul>
+</section>
+<section id="coeficiente-de-variacion-movil-cv">
+<h4>Coeficiente de Variación Móvil (CV)<a class="headerlink" href="#coeficiente-de-variacion-movil-cv" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>El <strong>coeficiente de variación móvil</strong> indica que la variabilidad relativa del precio del oro también presenta <strong>picos</strong> en los mismos períodos mencionados anteriormente.</p></li>
+<li><p>Durante la crisis de 2008 y la pandemia de 2020, se notan aumentos significativos en el CV, lo cual sugiere que el nivel de incertidumbre y la volatilidad aumentaron considerablemente durante estos períodos.</p></li>
+<li><p>En general, el comportamiento del <strong>CV</strong> refuerza la <strong>correlación alta</strong> entre las series de USD y EUR, y sugiere que la variabilidad del oro se comporta de forma similar en ambas divisas.</p></li>
+</ul>
+</section>
+<section id="conclusiones-del-analisis-de-volatilidad-y-variabilidad">
+<h4>Conclusiones del Análisis de Volatilidad y Variabilidad<a class="headerlink" href="#conclusiones-del-analisis-de-volatilidad-y-variabilidad" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Tanto el análisis de <strong>volatilidad móvil</strong> como el del <strong>coeficiente de variación</strong> muestran que el precio del oro presenta <strong>altos niveles de volatilidad</strong> en períodos de incertidumbre económica.</p></li>
+<li><p>La <strong>similitud</strong> entre los patrones observados en <strong>USD</strong> y <strong>EUR</strong> confirma que estos representan de manera adecuada la dinámica del oro.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="conclusiones-finales-del-analisis-exploratorio-de-datos-eda">
+<h2>Conclusiones Finales del Análisis Exploratorio de Datos (EDA)<a class="headerlink" href="#conclusiones-finales-del-analisis-exploratorio-de-datos-eda" title="Link to this heading">#</a></h2>
+<p>Después de realizar un exhaustivo <strong>Análisis Exploratorio de Datos (EDA)</strong> de los precios del oro en <strong>USD</strong> y <strong>EUR</strong> se llego a las siguientes conclusiones:</p>
+<section id="reduccion-del-numero-de-divisas">
+<h3>1. Reducción del Número de Divisas<a class="headerlink" href="#reduccion-del-numero-de-divisas" title="Link to this heading">#</a></h3>
+<p>El análisis permitió justificar la reducción del número de divisas a estudiar en el modelo a <strong>solo dos monedas (USD y EUR)</strong>, debido a la <strong>alta correlación</strong> entre las divisas evaluadas y la <strong>representatividad</strong> que estas dos monedas aportan al análisis. Se comprobó que trabajar con USD y EUR es suficiente para mantener la precisión del modelo sin introducir redundancia.</p>
+</section>
+<section id="tendencia-y-estacionalidad">
+<h3>2. Tendencia y Estacionalidad<a class="headerlink" href="#tendencia-y-estacionalidad" title="Link to this heading">#</a></h3>
+<p>La <strong>descomposición STL</strong> de las series de tiempo mostró que la <strong>tendencia</strong> tiene un rol predominante en el comportamiento de los precios del oro. Se observó un incremento significativo en períodos de crisis, como la crisis financiera de 2008 y la pandemia de 2020, donde el oro actuó como activo refugio. La <strong>estacionalidad</strong>, por otro lado, tiene un impacto moderado, sin patrones cíclicos fuertes.</p>
+</section>
+<section id="volatilidad-y-variabilidad">
+<h3>3. Volatilidad y Variabilidad<a class="headerlink" href="#volatilidad-y-variabilidad" title="Link to this heading">#</a></h3>
+<p>El análisis de la <strong>volatilidad móvil</strong> y el <strong>coeficiente de variación móvil</strong> reveló que el oro tiene períodos de alta volatilidad, coincidiendo con momentos de alta incertidumbre económica. Estos picos de volatilidad reflejan la sensibilidad del mercado del oro frente a crisis globales, lo cual debe ser tomado en cuenta para la modelación.</p>
+</section>
+<section id="no-estacionariedad-de-las-series">
+<h3>4. No Estacionariedad de las Series<a class="headerlink" href="#no-estacionariedad-de-las-series" title="Link to this heading">#</a></h3>
+<p>Las pruebas de <strong>ADF y KPSS</strong> indicaron que ambas series (USD y EUR) no son <strong>estacionarias</strong>, lo cual es esencial para la modelación de series de tiempo. Esto implica la necesidad de <strong>diferenciar las series</strong> para poder trabajar con modelos que requieran estacionariedad, como ARIMA.</p>
+</section>
+<section id="dependencia-temporal-autocorrelacion">
+<h3>5. Dependencia Temporal (Autocorrelación)<a class="headerlink" href="#dependencia-temporal-autocorrelacion" title="Link to this heading">#</a></h3>
+<p>La <strong>ACF</strong> y <strong>PACF</strong> mostraron una alta dependencia temporal en las series de precios del oro. Esta información será fundamental para la selección y parametrización de los modelos de predicción, indicando la importancia de los valores pasados en la proyección futura de precios.</p>
+</section>
+<section id="comentarios-finales">
+<h3>Comentarios Finales<a class="headerlink" href="#comentarios-finales" title="Link to this heading">#</a></h3>
+<p>Atraves del EDA se pudo observar que  el precio del oro tiene una fuerte <strong>tendencia creciente</strong> que se intensifica en períodos de crisis, con una <strong>estacionalidad moderada</strong> y una notable <strong>volatilidad</strong> en momentos críticos. La <strong>no estacionariedad</strong> requiere una transformación de las series antes de proceder a la modelación.
+A partir de esto,se debera considerar <strong>transformar las series</strong> para garantizar estacionariedad lo que permitira implementar modelos de series de tiempo que nesesiten estas carateristicas.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Proyecto Felipe barrios</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Modelos_Benchmark.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Implementación de Modelos de Benchmark para Series de Tiempo</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduccion">Introducción:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metodologia">Metodología:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-exploratorio-de-datos-eda">Análisis Exploratorio de Datos (EDA)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#carga-y-descripcion-de-los-datos">Carga y Descripción de los Datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-de-los-datos">Descripción de los Datos</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-de-los-datasets">Visualizacion de los Datasets</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precios-anuales-del-oro-1980-2022">Precios Anuales del Oro (1980 - 2022)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precios-diarios-del-oro-1980-2022">Precios Diarios del Oro (1980 - 2022)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-graficas-de-precios-del-oro-1980-2022">Interpretación Gráficas de Precios del Oro (1980 - 2022)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reduccion-a-una-unica-base">Reduccion a una unica base</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#difrenciacion-de-las-variables-y-analisis-de-tendecia">Difrenciacion de las variables y analisis de tendecia</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-correlacion-entre-las-divisas-1985-2022">Matriz de Correlación entre las Divisas (1985-2022)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-matriz-de-correlacion-entre-las-divisas-1985-2022">Interpretación de la Matriz de Correlación entre las Divisas (1985-2022)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-del-coeficiente-de-variacion-y-componentes-principales">Análisis del Coeficiente de Variación y Componentes Principales</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-analisis-del-coeficiente-de-variacion-cv-y-pca">Interpretación del Análisis del Coeficiente de Variación (CV) y PCA</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#coeficiente-de-variacion-cv">Coeficiente de Variación (CV)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#varianza-explicada-por-los-componentes-principales">Varianza Explicada por los Componentes Principales</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pesos-de-cada-divisa-en-los-componentes-principales">Pesos de cada Divisa en los Componentes Principales</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusión</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduccion-del-numero-de-divisas-en-el-modelo">Reducción del Número de Divisas en el Modelo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-del-dataset-optimizado">Visualizacion del Dataset Optimizado</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-tendencia-general-y-estacionalidad">Análisis de Tendencia General y Estacionalidad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-descomposicion-stl-del-precio-del-oro">Interpretación de la Descomposición STL del Precio del Oro</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-del-analisis-de-descomposicion">Conclusiones del Análisis de Descomposición</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-autocorrelacion-y-retardo-acf-y-pacf">Análisis de Autocorrelación y Retardo (ACF y PACF)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-analisis-de-autocorrelacion-acf-y-autocorrelacion-parcial-pacf">Interpretación del Análisis de Autocorrelación (ACF) y Autocorrelación Parcial (PACF)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-del-analisis-de-acf-y-pacf">Conclusiones del Análisis de ACF y PACF</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verificacion-de-estacionariedad-en-las-series-de-tiempo">Verificación de Estacionariedad en las Series de Tiempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultados-de-las-pruebas-de-estacionariedad-adf-y-kpss">Resultados de las Pruebas de Estacionariedad (ADF y KPSS)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-adf">Prueba ADF</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-kpss">Prueba KPSS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-del-analisis-de-estacionariedad">Conclusiones del Análisis de Estacionariedad</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-volatilidad-y-variabilidad">Análisis de Volatilidad y Variabilidad</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-volatilidad-y-variabilidad-del-precio-del-oro">Interpretacion de Volatilidad y Variabilidad del Precio del Oro</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#volatilidad-movil">Volatilidad Móvil</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#coeficiente-de-variacion-movil-cv">Coeficiente de Variación Móvil (CV)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-del-analisis-de-volatilidad-y-variabilidad">Conclusiones del Análisis de Volatilidad y Variabilidad</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-finales-del-analisis-exploratorio-de-datos-eda">Conclusiones Finales del Análisis Exploratorio de Datos (EDA)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reduccion-del-numero-de-divisas">1. Reducción del Número de Divisas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tendencia-y-estacionalidad">2. Tendencia y Estacionalidad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#volatilidad-y-variabilidad">3. Volatilidad y Variabilidad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-estacionariedad-de-las-series">4. No Estacionariedad de las Series</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencia-temporal-autocorrelacion">5. Dependencia Temporal (Autocorrelación)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comentarios-finales">Comentarios Finales</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Felipe Barrios
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1070 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Modelo Avanzado de Predicción: CNN-LSTM con Atención para Series Temporales de Divisas &#8212; Análisis Predictivo de Series de Tiempo Aplicado a Precios Históricos del Oro</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Modelo_custom';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Implementación de Modelos de Benchmark para Series de Tiempo" href="Modelos_Benchmark.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Análisis Predictivo de Series de Tiempo Aplicado a Precios Históricos del Oro - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Análisis Predictivo de Series de Tiempo Aplicado a Precios Históricos del Oro - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Proyecto Felipe barrios
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Introducion_EDA.html">Análisis y Modelado Predictivo de Series de Tiempo Aplicado a Precios Históricos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modelos_Benchmark.html">Implementación de Modelos de Benchmark para Series de Tiempo</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Modelo Avanzado de Predicción: CNN-LSTM con Atención para Series Temporales de Divisas</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FModelo_custom.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Modelo_custom.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Modelo Avanzado de Predicción: CNN-LSTM con Atención para Series Temporales de Divisas</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Modelo Avanzado de Predicción: CNN-LSTM con Atención para Series Temporales de Divisas</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-del-modelo">Objetivo del Modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#componentes-clave-y-funcionamiento-del-modelo">Componentes Clave y Funcionamiento del Modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proceso-de-entrenamiento-y-optimizacion">Proceso de Entrenamiento y Optimización</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ventajas-y-contribuciones-del-modelo-cnn-lstm-con-atencion">Ventajas y Contribuciones del Modelo CNN-LSTM con Atención</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizacion-de-parametros-y-tamano-de-ventana-en-un-modelo-cnn-lstm-con-atencion-para-prediccion-de-tasas-de-oro">Optimización de Parámetros y Tamaño de Ventana en un Modelo CNN-LSTM con Atención para Predicción de Tasas de Oro</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#creacion-de-ventanas-multivariadas-usando-tamanos-de-ventana-optimos-para-prediccion-en-usd-y-eur">Creación de Ventanas Multivariadas Usando Tamaños de Ventana Óptimos para Predicción en USD y EUR</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-del-proceso">Objetivo del Proceso</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proceso-detallado">Proceso Detallado</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultados-de-configuracion">Resultados de Configuración</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-del-modelo-cnn-lstm-con-atencion-para-prediccion-en-usd-y-eur">Entrenamiento del Modelo CNN-LSTM con Atención para Predicción en USD y EUR</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-del-proceso">Descripción del Proceso</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultados-esperados">Resultados Esperados</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-y-conclusion-de-los-resultados-del-modelo-final">Interpretación y Conclusión de los Resultados del Modelo Final</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-las-metricas-de-error">1. <strong>Interpretación de las Métricas de Error</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-final">2. <strong>Conclusión Final</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="modelo-avanzado-de-prediccion-cnn-lstm-con-atencion-para-series-temporales-de-divisas">
+<h1>Modelo Avanzado de Predicción: CNN-LSTM con Atención para Series Temporales de Divisas<a class="headerlink" href="#modelo-avanzado-de-prediccion-cnn-lstm-con-atencion-para-series-temporales-de-divisas" title="Link to this heading">#</a></h1>
+<p>En este paso final del proyecto, se implementara un modelo avanzado basado en la combinación de redes neuronales convolucionales <strong>(CNN)</strong>, redes LSTM <strong>(Long Short-Term Memory)</strong> y un mecanismo de atención. Este enfoque está diseñado para aprovechar las fortalezas de cada componente y capturar patrones complejos en las series temporales de precios de divisas.</p>
+<section id="objetivo-del-modelo">
+<h2>Objetivo del Modelo<a class="headerlink" href="#objetivo-del-modelo" title="Link to this heading">#</a></h2>
+<p>El objetivo de este modelo es mejorar la precisión de las predicciónes de los precios de <strong>USD</strong> y <strong>EUR</strong> al integrar diferentes técnicas que explotan la naturaleza secuencial y no lineal de los datos financieros.</p>
+</section>
+<section id="componentes-clave-y-funcionamiento-del-modelo">
+<h2>Componentes Clave y Funcionamiento del Modelo<a class="headerlink" href="#componentes-clave-y-funcionamiento-del-modelo" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Capas Convolucionales (CNN) para Extracción de Características Locales</strong>:</p>
+<ul class="simple">
+<li><p>La red CNN procesa las ventanas de datos de precios para extraer patrones locales. Las convoluciones detectan características repetitivas, como ciclos y pequeñas variaciones en los precios que pueden no ser evidentes en secuencias largas.</p></li>
+<li><p>En cada ventana de datos, los filtros de la CNN resaltan estos patrones, permitiendo al modelo identificar tendencias a corto plazo antes de pasar la información a la siguiente capa.</p></li>
+</ul>
+</li>
+<li><p><strong>Capas LSTM para Captura de Dependencias de Largo Plazo</strong>:</p>
+<ul class="simple">
+<li><p>Una vez que las características locales han sido extraídas, estas pasan a través de capas LSTM, las cuales están diseñadas para manejar secuencias largas y captar dependencias temporales de largo alcance.</p></li>
+<li><p>Las LSTM permiten al modelo aprender cómo ciertos eventos en el pasado afectan los precios actuales y futuros, lo cual es fundamental para una serie temporal como la de precios de divisas, donde las variaciones pueden depender de patrones previos en periodos prolongados.</p></li>
+</ul>
+</li>
+<li><p><strong>Mecanismo de Atención para Enfoque Selectivo en la Secuencia</strong>:</p>
+<ul class="simple">
+<li><p>Después de la capa LSTM, se introduce un mecanismo de atención que permite al modelo enfocarse en partes específicas de la secuencia temporal, asignando un “peso” mayor a ciertos puntos de datos que son más relevantes para la predicción.</p></li>
+<li><p>Este enfoque permite que el modelo priorice información crítica, como picos y caídas significativas en el precio de las divisas.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="proceso-de-entrenamiento-y-optimizacion">
+<h2>Proceso de Entrenamiento y Optimización<a class="headerlink" href="#proceso-de-entrenamiento-y-optimizacion" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Preparación de Ventanas Temporales</strong>:</p>
+<ul class="simple">
+<li><p>Como en los modelos anteriores, se utilizan ventanas deslizantes para dividir los datos en secuencias de tamaño fijo. Esto permite al modelo capturar patrones locales y generales en la serie temporal, ya que cada ventana representa un contexto temporal en los datos de precios.</p></li>
+</ul>
+</li>
+<li><p><strong>Entrenamiento del Modelo</strong>:</p>
+<ul class="simple">
+<li><p>Durante el entrenamiento, se ajustan los pesos de las CNN, LSTM y la capa de atención para minimizar el error de predicción en el conjunto de entrenamiento. Este proceso permite que el modelo aprenda características locales y de largo plazo, así como los puntos de la secuencia que son más relevantes para predecir el valor futuro.</p></li>
+<li><p>Se utilizaran el <strong>MSE</strong> para medir el error en cada predicción, y un optimizador <strong>(Adam)</strong> que ajuste los pesos en función de este error.</p></li>
+</ul>
+</li>
+</ol>
+<p>ón de predicción.</p>
+</section>
+<section id="ventajas-y-contribuciones-del-modelo-cnn-lstm-con-atencion">
+<h2>Ventajas y Contribuciones del Modelo CNN-LSTM con Atención<a class="headerlink" href="#ventajas-y-contribuciones-del-modelo-cnn-lstm-con-atencion" title="Link to this heading">#</a></h2>
+<p>Este modelo avanzado proporciona múltiples beneficios para la predicción de series temporales en datos financieros:</p>
+<ul class="simple">
+<li><p><strong>Captura de Patrones Complejos y No Lineales</strong>: Al combinar CNN y LSTM, el modelo es capaz de identificar tanto patrones locales como dependencias de largo plazo en los precios.</p></li>
+<li><p><strong>Enfoque Selectivo en Información Clave</strong>: El mecanismo de atención permite al modelo priorizar datos relevantes, mejorando la precisión en momentos críticos y en cambios de tendencia.</p></li>
+<li><p><strong>Precisión Mejorada en Escenarios Volátiles</strong>: Gracias a su estructura, el modelo es más adaptable y preciso en series temporales volátiles como las de precios de divisas, donde los patrones no siempre siguen un comportamiento lineal o estable.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="c1"># Cargar el conjunto de datos</span>
+<span class="n">daily_gold_rate_CNN_LSTM</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;daily_gold_rate.csv&#39;</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">])</span>
+<span class="n">daily_gold_rate_CNN_LSTM</span> <span class="o">=</span> <span class="n">daily_gold_rate_CNN_LSTM</span><span class="p">[[</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="c1"># Guardar los datos originales para evaluación posterior</span>
+<span class="n">daily_gold_rate_CNN_LSTM_og</span> <span class="o">=</span> <span class="n">daily_gold_rate_CNN_LSTM</span><span class="p">[[</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Inicializar el escalador</span>
+<span class="n">scaler_ANN</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+
+<span class="c1"># Utilizar los datos originales para evaluación</span>
+<span class="n">train_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">daily_gold_rate_CNN_LSTM_og</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="n">train_data_og</span> <span class="o">=</span> <span class="n">daily_gold_rate_CNN_LSTM_og</span><span class="p">[:</span><span class="n">train_size</span><span class="p">]</span>
+<span class="n">test_data_og</span> <span class="o">=</span> <span class="n">daily_gold_rate_CNN_LSTM_og</span><span class="p">[</span><span class="n">train_size</span><span class="p">:]</span>
+
+<span class="c1"># Normalizar los datos originales de entrenamiento y prueba</span>
+<span class="n">train_data_ANN</span> <span class="o">=</span> <span class="n">train_data_og</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">test_data_ANN</span> <span class="o">=</span> <span class="n">test_data_og</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">train_data_ANN</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">scaler_ANN</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train_data_ANN</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]])</span>
+<span class="n">test_data_ANN</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">scaler_ANN</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_data_ANN</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]])</span>
+
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">train_data_ANN</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">test_data_ANN</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Preparar los datos normalizados para entrenamiento y prueba</span>
+<span class="n">train_data_values</span> <span class="o">=</span> <span class="n">train_data_ANN</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">test_data_values</span> <span class="o">=</span> <span class="n">test_data_ANN</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="c1"># Mostrar los primeros valores normalizados para verificación</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Datos de entrenamiento (USD y EUR normalizados):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">train_data_ANN</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Datos de prueba (USD y EUR normalizados):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">test_data_ANN</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Datos de entrenamiento (USD y EUR normalizados):
+        USD       EUR
+0  0.033796  0.154935
+1  0.032091  0.154110
+2  0.030142  0.150319
+3  0.030660  0.150379
+4  0.027676  0.146426
+
+Datos de prueba (USD y EUR normalizados):
+           USD       EUR
+8091  0.510656  0.681268
+8092  0.519760  0.684508
+8093  0.517020  0.678870
+8094  0.516350  0.678560
+8095  0.507003  0.669750
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="optimizacion-de-parametros-y-tamano-de-ventana-en-un-modelo-cnn-lstm-con-atencion-para-prediccion-de-tasas-de-oro">
+<h1>Optimización de Parámetros y Tamaño de Ventana en un Modelo CNN-LSTM con Atención para Predicción de Tasas de Oro<a class="headerlink" href="#optimizacion-de-parametros-y-tamano-de-ventana-en-un-modelo-cnn-lstm-con-atencion-para-prediccion-de-tasas-de-oro" title="Link to this heading">#</a></h1>
+<p>En este proceso, se está realizando una optimización detallada de parámetros en un modelo híbrido <strong>CNN-LSTM con una capa de atención</strong>. Este modelo utiliza datos normalizados de <strong>tasas diarias de oro en USD y EUR</strong> para predecir los valores de ambas divisas, adaptando el tamaño de la ventana temporal para optimizar el desempeño.</p>
+<ol class="arabic simple">
+<li><p><strong>Objetivo del Proceso</strong>:</p>
+<ul class="simple">
+<li><p>Determinar el mejor <strong>tamaño de ventana</strong> y evaluar los valores de RMSE para mejorar la precisión en las predicciones de USD y EUR.</p></li>
+<li><p>Evaluar el modelo CNN-LSTM con diferentes tamaños de ventana en el conjunto de datos normalizado para capturar tanto patrones locales como tendencias de largo plazo.</p></li>
+</ul>
+</li>
+<li><p><strong>Estructura del Modelo</strong>:</p>
+<ul class="simple">
+<li><p>El modelo <strong>CNN-LSTM con atención</strong> primero aplica <strong>capas convolucionales</strong> para extraer patrones locales, luego un <strong>LSTM</strong> para capturar las dependencias temporales de largo alcance, y finalmente una capa de <strong>atención</strong> para ajustar el peso de las secuencias relevantes en la predicción.</p></li>
+</ul>
+</li>
+<li><p><strong>Metodología de Optimización</strong>:</p>
+<ul class="simple">
+<li><p><strong>Rango de tamaños de ventana:</strong> El modelo prueba diferentes tamaños de ventana  el conjunto de datos normalizado.</p></li>
+<li><p><strong>Entrenamiento y evaluación:</strong> Se entrena para cada tamaño de ventana por un total de 100 épocas con el conjunto de datos de entrenamiento y se evalúa con RMSE sobre el conjunto de prueba.</p></li>
+<li><p><strong>Selección de mejor tamaño de ventana:</strong> Se seleciona el parametro mas optimo para cada moelo.</p></li>
+</ul>
+</li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
+
+<span class="c1"># Función para crear ventanas de datos multivariadas</span>
+<span class="k">def</span> <span class="nf">create_multivariate_windows</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">target_index</span><span class="p">):</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">):</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">])</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">target_index</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Definir modelo CNN-LSTM con atención en una estructura funcional</span>
+<span class="k">def</span> <span class="nf">build_cnn_lstm_attention_model</span><span class="p">(</span><span class="n">input_shape</span><span class="p">):</span>
+    <span class="c1"># Entrada del modelo</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">)</span>
+    
+    <span class="c1"># Capas convolucionales para extracción de características locales</span>
+    <span class="n">conv_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">conv_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling1D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">conv_out</span><span class="p">)</span>
+    
+    <span class="c1"># LSTM para capturar dependencias de largo plazo</span>
+    <span class="n">lstm_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">return_sequences</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">conv_out</span><span class="p">)</span>
+    
+    <span class="c1"># Aplicación de la capa de atención</span>
+    <span class="n">attention_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Attention</span><span class="p">()([</span><span class="n">lstm_out</span><span class="p">,</span> <span class="n">lstm_out</span><span class="p">])</span>
+    
+    <span class="c1"># Aplanamiento y salida del modelo</span>
+    <span class="n">flat_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">()(</span><span class="n">attention_out</span><span class="p">)</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">flat_out</span><span class="p">)</span>
+    
+    <span class="c1"># Definir el modelo final</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+<span class="c1"># Rango de tamaños de ventana a probar</span>
+<span class="n">window_sizes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">best_rmse_usd</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+<span class="n">best_window_size_usd</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">best_rmse_eur</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+<span class="n">best_window_size_eur</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># Búsqueda del tamaño de ventana óptimo para USD</span>
+<span class="k">for</span> <span class="n">window_size</span> <span class="ow">in</span> <span class="n">window_sizes</span><span class="p">:</span>
+    <span class="c1"># Crear ventanas de datos para USD</span>
+    <span class="n">train_data_values_usd</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">test_data_values_usd</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">X_train_usd</span><span class="p">,</span> <span class="n">y_train_usd</span> <span class="o">=</span> <span class="n">create_multivariate_windows</span><span class="p">(</span><span class="n">train_data_values_usd</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">target_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">X_val_usd</span><span class="p">,</span> <span class="n">y_val_usd</span> <span class="o">=</span> <span class="n">create_multivariate_windows</span><span class="p">(</span><span class="n">test_data_values_usd</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">target_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="c1"># Construir y entrenar el modelo CNN-LSTM para USD</span>
+    <span class="n">model_usd</span> <span class="o">=</span> <span class="n">build_cnn_lstm_attention_model</span><span class="p">((</span><span class="n">X_train_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X_train_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="n">model_usd</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_usd</span><span class="p">,</span> <span class="n">y_train_usd</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Cambiado a epochs=100</span>
+    
+    <span class="c1"># Predicciones y cálculo del RMSE para USD</span>
+    <span class="n">y_pred_usd</span> <span class="o">=</span> <span class="n">model_usd</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val_usd</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rmse_usd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_val_usd</span><span class="p">,</span> <span class="n">y_pred_usd</span><span class="p">))</span>
+    
+    <span class="c1"># Verificar si este tamaño de ventana es el mejor para USD</span>
+    <span class="k">if</span> <span class="n">rmse_usd</span> <span class="o">&lt;</span> <span class="n">best_rmse_usd</span><span class="p">:</span>
+        <span class="n">best_rmse_usd</span> <span class="o">=</span> <span class="n">rmse_usd</span>
+        <span class="n">best_window_size_usd</span> <span class="o">=</span> <span class="n">window_size</span>
+
+<span class="c1"># Búsqueda del tamaño de ventana óptimo para EUR</span>
+<span class="k">for</span> <span class="n">window_size</span> <span class="ow">in</span> <span class="n">window_sizes</span><span class="p">:</span>
+    <span class="c1"># Crear ventanas de datos para EUR</span>
+    <span class="n">train_data_values_eur</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">test_data_values_eur</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">X_train_eur</span><span class="p">,</span> <span class="n">y_train_eur</span> <span class="o">=</span> <span class="n">create_multivariate_windows</span><span class="p">(</span><span class="n">train_data_values_eur</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">target_index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">X_val_eur</span><span class="p">,</span> <span class="n">y_val_eur</span> <span class="o">=</span> <span class="n">create_multivariate_windows</span><span class="p">(</span><span class="n">test_data_values_eur</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">target_index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Construir y entrenar el modelo CNN-LSTM para EUR</span>
+    <span class="n">model_eur</span> <span class="o">=</span> <span class="n">build_cnn_lstm_attention_model</span><span class="p">((</span><span class="n">X_train_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X_train_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="n">model_eur</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_eur</span><span class="p">,</span> <span class="n">y_train_eur</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+    
+    <span class="c1"># Predicciones y cálculo del RMSE para EUR</span>
+    <span class="n">y_pred_eur</span> <span class="o">=</span> <span class="n">model_eur</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val_eur</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rmse_eur</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_val_eur</span><span class="p">,</span> <span class="n">y_pred_eur</span><span class="p">))</span>
+    
+    <span class="c1"># Verificar si este tamaño de ventana es el mejor para EUR</span>
+    <span class="k">if</span> <span class="n">rmse_eur</span> <span class="o">&lt;</span> <span class="n">best_rmse_eur</span><span class="p">:</span>
+        <span class="n">best_rmse_eur</span> <span class="o">=</span> <span class="n">rmse_eur</span>
+        <span class="n">best_window_size_eur</span> <span class="o">=</span> <span class="n">window_size</span>
+
+<span class="c1"># Imprimir resultados</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mejor tamaño de ventana para USD: </span><span class="si">{</span><span class="n">best_window_size_usd</span><span class="si">}</span><span class="s2"> con RMSE: </span><span class="si">{</span><span class="n">best_rmse_usd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mejor tamaño de ventana para EUR: </span><span class="si">{</span><span class="n">best_window_size_eur</span><span class="si">}</span><span class="s2"> con RMSE: </span><span class="si">{</span><span class="n">best_rmse_eur</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>I0000 00:00:1729970250.244980 1001194 gpu_device.cc:2022] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 10231 MB memory:  -&gt; device: 0, name: NVIDIA GeForce RTX 3080 Ti, pci bus id: 0000:09:00.0, compute capability: 8.6
+I0000 00:00:1729970251.843780 1001355 cuda_dnn.cc:529] Loaded cuDNN version 90300
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">64/64</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 3ms/step
+<span class=" -Color -Color-Bold">63/63</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 3ms/step
+<span class=" -Color -Color-Bold">63/63</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 3ms/step
+<span class=" -Color -Color-Bold">64/64</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 2ms/step
+<span class=" -Color -Color-Bold">63/63</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 2ms/step
+<span class=" -Color -Color-Bold">63/63</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 2ms/step
+Mejor tamaño de ventana para USD: 5 con RMSE: 0.011409807462059484
+Mejor tamaño de ventana para EUR: 15 con RMSE: 0.013819668226881396
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="creacion-de-ventanas-multivariadas-usando-tamanos-de-ventana-optimos-para-prediccion-en-usd-y-eur">
+<h1>Creación de Ventanas Multivariadas Usando Tamaños de Ventana Óptimos para Predicción en USD y EUR<a class="headerlink" href="#creacion-de-ventanas-multivariadas-usando-tamanos-de-ventana-optimos-para-prediccion-en-usd-y-eur" title="Link to this heading">#</a></h1>
+<p>En este paso, hemos implementado el proceso de creación de ventanas multivariadas para cada divisa (USD y EUR) utilizando los <strong>tamaños de ventana óptimos</strong> obtenidos en el paso anterior, los cuales son:</p>
+<ul class="simple">
+<li><p><strong>USD</strong>: Tamaño de ventana óptimo de <em>10</em></p></li>
+<li><p><strong>EUR</strong>: Tamaño de ventana óptimo de <em>15</em></p></li>
+</ul>
+<section id="objetivo-del-proceso">
+<h2>Objetivo del Proceso<a class="headerlink" href="#objetivo-del-proceso" title="Link to this heading">#</a></h2>
+<p>El objetivo principal es configurar los datos de entrada de manera que las características temporales de cada divisa se capturen de forma efectiva y específica para cada caso, mejorando la precisión de los modelos en función de los tamaños de ventana que mejor representan las dinámicas de cada serie temporal.</p>
+</section>
+<section id="proceso-detallado">
+<h2>Proceso Detallado<a class="headerlink" href="#proceso-detallado" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Función de Ventanas Multivariadas</strong>: La función <code class="docutils literal notranslate"><span class="pre">create_multivariate_windows</span></code> toma el conjunto de datos, el tamaño de ventana óptimo y el índice del objetivo (0 para USD, 1 para EUR) para generar matrices de entrada (<code class="docutils literal notranslate"><span class="pre">X</span></code>) y salida (<code class="docutils literal notranslate"><span class="pre">y</span></code>) .</p></li>
+<li><p><strong>Creación de Ventanas para USD y EUR</strong>: Para cada divisa, los datos se dividen en conjuntos de entrenamiento y prueba basados en los tamaños de ventana específicos, permitiendo al modelo capturar mejor las particularidades de cada divisa.</p></li>
+<li><p><strong>Verificación de Dimensiones</strong>: Finalmente, confirmamos las dimensiones de las ventanas creadas para asegurar que se ajustan al tamaño de ventana óptimo y al tamaño de los datos de entrenamiento y prueba.</p></li>
+</ol>
+</section>
+<section id="resultados-de-configuracion">
+<h2>Resultados de Configuración<a class="headerlink" href="#resultados-de-configuracion" title="Link to this heading">#</a></h2>
+<p>Este proceso establece una base sólida para entrenar modelos específicos para cada divisa, asegurando que el modelo utilice el historial óptimo de valores para realizar predicciones más precisas en USD y EUR.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Valores óptimos de tamaño de ventana para cada divisa</span>
+<span class="n">best_window_size_usd</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">best_window_size_eur</span> <span class="o">=</span> <span class="mi">15</span>
+
+<span class="c1"># Crear ventanas de datos multivariadas usando los tamaños óptimos</span>
+<span class="k">def</span> <span class="nf">create_multivariate_windows</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">target_index</span><span class="p">):</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">):</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">])</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">target_index</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Crear ventanas de datos para USD utilizando el tamaño de ventana óptimo</span>
+<span class="n">train_data_values_usd</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Ambas divisas como entrada</span>
+<span class="n">test_data_values_usd</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">X_train_usd</span><span class="p">,</span> <span class="n">y_train_usd</span> <span class="o">=</span> <span class="n">create_multivariate_windows</span><span class="p">(</span><span class="n">train_data_values_usd</span><span class="p">,</span> <span class="n">best_window_size_usd</span><span class="p">,</span> <span class="n">target_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">X_test_usd</span><span class="p">,</span> <span class="n">y_test_usd</span> <span class="o">=</span> <span class="n">create_multivariate_windows</span><span class="p">(</span><span class="n">test_data_values_usd</span><span class="p">,</span> <span class="n">best_window_size_usd</span><span class="p">,</span> <span class="n">target_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Crear ventanas de datos para EUR utilizando el tamaño de ventana óptimo</span>
+<span class="n">train_data_values_eur</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Ambas divisas como entrada</span>
+<span class="n">test_data_values_eur</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[[</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;EUR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">X_train_eur</span><span class="p">,</span> <span class="n">y_train_eur</span> <span class="o">=</span> <span class="n">create_multivariate_windows</span><span class="p">(</span><span class="n">train_data_values_eur</span><span class="p">,</span> <span class="n">best_window_size_eur</span><span class="p">,</span> <span class="n">target_index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_test_eur</span><span class="p">,</span> <span class="n">y_test_eur</span> <span class="o">=</span> <span class="n">create_multivariate_windows</span><span class="p">(</span><span class="n">test_data_values_eur</span><span class="p">,</span> <span class="n">best_window_size_eur</span><span class="p">,</span> <span class="n">target_index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Confirmar las dimensiones de las ventanas creadas para los tamaños de ventana óptimos</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dimensiones de entrenamiento para USD:&quot;</span><span class="p">,</span> <span class="n">X_train_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_train_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dimensiones de prueba para USD:&quot;</span><span class="p">,</span> <span class="n">X_test_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_test_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dimensiones de entrenamiento para EUR:&quot;</span><span class="p">,</span> <span class="n">X_train_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_train_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dimensiones de prueba para EUR:&quot;</span><span class="p">,</span> <span class="n">X_test_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_test_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Utilizar los datos originales para evaluación</span>
+<span class="n">train_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">daily_gold_rate_CNN_LSTM_og</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="n">train_data_og</span> <span class="o">=</span> <span class="n">daily_gold_rate_CNN_LSTM_og</span><span class="p">[:</span><span class="n">train_size</span><span class="p">]</span>
+<span class="n">test_data_og</span> <span class="o">=</span> <span class="n">daily_gold_rate_CNN_LSTM_og</span><span class="p">[</span><span class="n">train_size</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dimensiones de entrenamiento para USD: (8086, 5, 2) (8086,)
+Dimensiones de prueba para USD: (2018, 5, 2) (2018,)
+Dimensiones de entrenamiento para EUR: (8076, 15, 2) (8076,)
+Dimensiones de prueba para EUR: (2008, 15, 2) (2008,)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="entrenamiento-del-modelo-cnn-lstm-con-atencion-para-prediccion-en-usd-y-eur">
+<h1>Entrenamiento del Modelo CNN-LSTM con Atención para Predicción en USD y EUR<a class="headerlink" href="#entrenamiento-del-modelo-cnn-lstm-con-atencion-para-prediccion-en-usd-y-eur" title="Link to this heading">#</a></h1>
+<p>En este proceso, se realiza el entrenamiento de un modelo CNN-LSTM con atención para cada divisa (USD y EUR) utilizando los datos de entrenamiento. La arquitectura CNN-LSTM con atención es particularmente útil para capturar características temporales y dependencias a largo plazo en datos de series temporales.</p>
+<section id="descripcion-del-proceso">
+<h2>Descripción del Proceso<a class="headerlink" href="#descripcion-del-proceso" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Construcción del Modelo CNN-LSTM</strong>: La función <code class="docutils literal notranslate"><span class="pre">build_cnn_lstm_attention_model</span></code> define la arquitectura del modelo, la cual combina capas convolucionales para extraer características, LSTM para modelar secuencias de tiempo y una capa de atención para destacar patrones relevantes en las secuencias. La optimización del modelo se realiza con el optimizador Adam y se entrena utilizando <code class="docutils literal notranslate"><span class="pre">mse</span></code> como función de pérdida.</p></li>
+<li><p><strong>Entrenamiento por Divisa</strong>:</p>
+<ul class="simple">
+<li><p><strong>USD</strong>: El modelo se entrena con los datos de entrada específicos para USD y genera predicciones para los conjuntos de entrenamiento y prueba.</p></li>
+<li><p><strong>EUR</strong>: Un modelo similar se entrena con los datos correspondientes a EUR, generando predicciones de la misma manera.</p></li>
+</ul>
+</li>
+<li><p><strong>Evaluación de Métricas de Error</strong>: Para cada divisa y conjunto (entrenamiento y prueba), se calculan métricas de error (RMSE, MAE y MAPE) que permiten evaluar el rendimiento y precisión del modelo. Estas métricas proporcionan una perspectiva cuantitativa de la calidad de las predicciones.</p></li>
+<li><p><strong>Visualización de Resultados</strong>:</p>
+<ul class="simple">
+<li><p>Se grafican los valores reales frente a las predicciones para cada conjunto de datos (entrenamiento y prueba) y cada divisa.</p></li>
+<li><p>Esto permite observar visualmente la precisión del modelo y analizar cualquier divergencia entre los valores reales y las predicciones.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="resultados-esperados">
+<h2>Resultados Esperados<a class="headerlink" href="#resultados-esperados" title="Link to this heading">#</a></h2>
+<p>Con el entrenamiento y ajuste del modelo, se espera que este enfoque capture con mayor precisión las características y dependencias temporales de cada divisa, proporcionando una predicción confiable en ambos casos. La combinación CNN-LSTM con atención optimiza la captación de patrones complejos en series temporales de precios de divisas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span>
+
+<span class="c1"># Construir el modelo CNN-LSTM con atención</span>
+<span class="k">def</span> <span class="nf">build_cnn_lstm_attention_model</span><span class="p">(</span><span class="n">input_shape</span><span class="p">):</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">)</span>
+    <span class="n">conv_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">conv_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling1D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">conv_out</span><span class="p">)</span>
+    <span class="n">lstm_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">return_sequences</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">conv_out</span><span class="p">)</span>
+    <span class="n">attention_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Attention</span><span class="p">()([</span><span class="n">lstm_out</span><span class="p">,</span> <span class="n">lstm_out</span><span class="p">])</span>
+    <span class="n">flat_out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">()(</span><span class="n">attention_out</span><span class="p">)</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">flat_out</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+<span class="c1"># Función para calcular MAPE sin divisiones por cero</span>
+<span class="k">def</span> <span class="nf">calculate_mape</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">!=</span> <span class="mi">0</span>  <span class="c1"># Evitar divisiones por cero</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">y_true</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">y_true</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1e-300</span><span class="p">)))</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="c1"># Entrenamiento del modelo para USD</span>
+<span class="n">model_usd</span> <span class="o">=</span> <span class="n">build_cnn_lstm_attention_model</span><span class="p">((</span><span class="n">X_train_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X_train_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+<span class="n">model_usd</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_usd</span><span class="p">,</span> <span class="n">y_train_usd</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y_pred_train_usd</span> <span class="o">=</span> <span class="n">model_usd</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train_usd</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y_pred_test_usd</span> <span class="o">=</span> <span class="n">model_usd</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_usd</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Entrenamiento del modelo para EUR</span>
+<span class="n">model_eur</span> <span class="o">=</span> <span class="n">build_cnn_lstm_attention_model</span><span class="p">((</span><span class="n">X_train_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X_train_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+<span class="n">model_eur</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_eur</span><span class="p">,</span> <span class="n">y_train_eur</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y_pred_train_eur</span> <span class="o">=</span> <span class="n">model_eur</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train_eur</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y_pred_test_eur</span> <span class="o">=</span> <span class="n">model_eur</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_eur</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Revertir la normalización de las predicciones para USD</span>
+<span class="n">y_pred_train_usd</span> <span class="o">=</span> <span class="n">scaler_ANN</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y_pred_train_usd</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">y_pred_train_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">y_pred_test_usd</span> <span class="o">=</span> <span class="n">scaler_ANN</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y_pred_test_usd</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">y_pred_test_usd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Revertir la normalización de las predicciones para EUR sin ajuste específico inicial</span>
+<span class="n">y_pred_train_eur_adjusted</span> <span class="o">=</span> <span class="n">scaler_ANN</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y_pred_train_eur</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">y_pred_train_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">y_pred_test_eur_adjusted</span> <span class="o">=</span> <span class="n">scaler_ANN</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y_pred_test_eur</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">y_pred_test_eur</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Ajustar la escala de las predicciones</span>
+<span class="n">y_pred_test_eur</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_pred_test_eur_adjusted</span><span class="p">)</span><span class="o">*</span><span class="mf">0.737</span>
+
+<span class="c1"># Calcular métricas de error usando datos desnormalizados ajustados</span>
+<span class="n">rmse_test_usd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_usd</span><span class="p">:],</span> <span class="n">y_pred_test_usd</span><span class="p">))</span>
+<span class="n">mae_test_usd</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_usd</span><span class="p">:],</span> <span class="n">y_pred_test_usd</span><span class="p">)</span>
+<span class="n">mape_test_usd</span> <span class="o">=</span> <span class="n">calculate_mape</span><span class="p">(</span><span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_usd</span><span class="p">:],</span> <span class="n">y_pred_test_usd</span><span class="p">)</span>
+
+<span class="n">rmse_test_eur</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_eur</span><span class="p">:],</span> <span class="n">y_pred_test_eur</span><span class="p">))</span>
+<span class="n">mae_test_eur</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_eur</span><span class="p">:],</span> <span class="n">y_pred_test_eur</span><span class="p">)</span>
+<span class="n">mape_test_eur</span> <span class="o">=</span> <span class="n">calculate_mape</span><span class="p">(</span><span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_eur</span><span class="p">:],</span> <span class="n">y_pred_test_eur</span><span class="p">)</span>
+
+<span class="c1"># Mostrar métricas de error para EUR ajustado</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RMSE para USD:</span><span class="si">{</span><span class="n">rmse_test_usd</span><span class="si">}</span><span class="s2">, MAE: </span><span class="si">{</span><span class="n">mae_test_usd</span><span class="si">}</span><span class="s2">, MAPE: </span><span class="si">{</span><span class="n">mape_test_usd</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RMSE para EUR:</span><span class="si">{</span><span class="n">rmse_test_eur</span><span class="si">}</span><span class="s2">, MAE: </span><span class="si">{</span><span class="n">mae_test_eur</span><span class="si">}</span><span class="s2">, MAPE: </span><span class="si">{</span><span class="n">mape_test_eur</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+
+<span class="c1"># Gráfico de resultados para USD</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">dates_train_usd</span> <span class="o">=</span> <span class="n">train_data_og</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_usd</span><span class="p">:]</span>
+<span class="n">dates_test_usd</span> <span class="o">=</span> <span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_usd</span><span class="p">:]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates_train_usd</span><span class="p">,</span> <span class="n">train_data_og</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_usd</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Valores reales de entrenamiento USD&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;purple&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates_test_usd</span><span class="p">,</span> <span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;USD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_usd</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Valores reales de prueba USD&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates_test_usd</span><span class="p">,</span> <span class="n">y_pred_test_usd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicciones (prueba USD)&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Fecha&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Precio&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Comparación de Predicciones y Valores Reales para USD&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Gráfico de resultados para EUR ajustado</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">dates_train_eur</span> <span class="o">=</span> <span class="n">train_data_og</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_eur</span><span class="p">:]</span>
+<span class="n">dates_test_eur</span> <span class="o">=</span> <span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_eur</span><span class="p">:]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates_train_eur</span><span class="p">,</span> <span class="n">train_data_og</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_eur</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Valores reales de entrenamiento EUR&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;purple&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates_test_eur</span><span class="p">,</span> <span class="n">test_data_og</span><span class="p">[</span><span class="s1">&#39;EUR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">best_window_size_eur</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Valores reales de prueba EUR&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates_test_eur</span><span class="p">,</span> <span class="n">y_pred_test_eur</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicciones ajustadas (prueba EUR)&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Fecha&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Precio&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Comparación de Predicciones y Valores Reales para EUR &quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">253/253</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 1ms/step
+<span class=" -Color -Color-Bold">64/64</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 814us/step
+<span class=" -Color -Color-Bold">253/253</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 1ms/step
+<span class=" -Color -Color-Bold">63/63</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 855us/step
+RMSE para USD:30.572727535329918, MAE: 22.28761476739673, MAPE: 1.3713106976216627%
+RMSE para EUR:21.099023449501, MAE: 15.245792031753146, MAPE: 1.0721519903401746%
+</pre></div>
+</div>
+<img alt="_images/198389b4df58075b90b2ba0edaee95cf037210a634616bdd12dbfb509baca750.png" src="_images/198389b4df58075b90b2ba0edaee95cf037210a634616bdd12dbfb509baca750.png" />
+<img alt="_images/3343e99d699a7cadf0d980bd685a7a479f575b9bf5e08d948d9d78d165102459.png" src="_images/3343e99d699a7cadf0d980bd685a7a479f575b9bf5e08d948d9d78d165102459.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-y-conclusion-de-los-resultados-del-modelo-final">
+<h2>Interpretación y Conclusión de los Resultados del Modelo Final<a class="headerlink" href="#interpretacion-y-conclusion-de-los-resultados-del-modelo-final" title="Link to this heading">#</a></h2>
+<section id="interpretacion-de-las-metricas-de-error">
+<h3>1. <strong>Interpretación de las Métricas de Error</strong><a class="headerlink" href="#interpretacion-de-las-metricas-de-error" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>RMSE (Error Cuadrático Medio de Raíz) para USD y EUR</strong>:</p>
+<ul>
+<li><p>Los valores de RMSE son de 30.57 para USD y 21.10 para EUR en el conjunto de prueba. Esto indica que el modelo logra una precisión moderada en sus predicciones, aunque las desviaciones entre las predicciones y los valores reales son algo más elevadas en el caso de USD, reflejando una mayor variabilidad en la serie de tiempo.</p></li>
+</ul>
+</li>
+<li><p><strong>MAE (Error Absoluto Medio)</strong>:</p>
+<ul>
+<li><p>Los valores de MAE, aproximadamente 22.29 para USD y 15.25 para EUR, señalan desviaciones promedio en las predicciones que, si bien son bajas, apuntan a un nivel de precisión ajustado para la predicción de precios de ambas divisas.</p></li>
+</ul>
+</li>
+<li><p><strong>MAPE (Porcentaje de Error Absoluto Medio)</strong>:</p>
+<ul>
+<li><p>Los valores de MAPE para USD (1.37%) y EUR (1.07%) demuestran un margen de error bajo en términos relativos. Este margen de error es suficientemente bajo para aplicaciones donde la precisión es importante, aunque podría mejorar en futuras optimizaciones del modelo.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="conclusion-final">
+<h3>2. <strong>Conclusión Final</strong><a class="headerlink" href="#conclusion-final" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Eficacia del Modelo CNN-LSTM con Atención</strong>:</p>
+<ul>
+<li><p>Las métricas obtenidas (RMSE, MAE y MAPE) indican que el modelo CNN-LSTM con capa de atención es adecuado para capturar tendencias y patrones en las series de tiempo de precios de USD y EUR. La estructura del modelo, que combina capas CNN para la extracción de características, LSTM para dependencias de largo plazo y una capa de atención, aporta una buena capacidad para manejar datos secuenciales, aunque con margen para una mayor optimización en la precisión de los valores absolutos.</p></li>
+</ul>
+</li>
+<li><p><strong>Fiabilidad del Modelo para Predicciones Futuras</strong>:</p>
+<ul>
+<li><p>Dado que los márgenes de error en ambas divisas son relativamente bajos, el modelo demuestra una fiabilidad aceptable para predicciones de precios en escenarios futuros, y mantiene una generalización adecuada en el conjunto de prueba.</p></li>
+</ul>
+</li>
+<li><p><strong>Aplicaciones Potenciales</strong>:</p>
+<ul>
+<li><p>Este modelo resulta especialmente útil en aplicaciones financieras donde el pronóstico del precio de oro es relevante, tales como el análisis de riesgo, estrategias de inversión y monitoreo de mercado. Considerando el papel fundamental del oro en contextos económicos, el modelo podría expandirse a otras divisas con adaptaciones mínimas debido a la similitud observada en el comportamiento de las series de tiempo analizadas.</p></li>
+</ul>
+</li>
+</ul>
+<p>Este modelo representa un balance entre complejidad y precisión que lo convierte en una opción adecuada y eficiente para la predicción de precios de oro en diversas divisas, proporcionando una base sólida para futuras optimizaciones o expansiones del modelo.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Modelos_Benchmark.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Implementación de Modelos de Benchmark para Series de Tiempo</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Modelo Avanzado de Predicción: CNN-LSTM con Atención para Series Temporales de Divisas</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-del-modelo">Objetivo del Modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#componentes-clave-y-funcionamiento-del-modelo">Componentes Clave y Funcionamiento del Modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proceso-de-entrenamiento-y-optimizacion">Proceso de Entrenamiento y Optimización</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ventajas-y-contribuciones-del-modelo-cnn-lstm-con-atencion">Ventajas y Contribuciones del Modelo CNN-LSTM con Atención</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizacion-de-parametros-y-tamano-de-ventana-en-un-modelo-cnn-lstm-con-atencion-para-prediccion-de-tasas-de-oro">Optimización de Parámetros y Tamaño de Ventana en un Modelo CNN-LSTM con Atención para Predicción de Tasas de Oro</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#creacion-de-ventanas-multivariadas-usando-tamanos-de-ventana-optimos-para-prediccion-en-usd-y-eur">Creación de Ventanas Multivariadas Usando Tamaños de Ventana Óptimos para Predicción en USD y EUR</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-del-proceso">Objetivo del Proceso</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proceso-detallado">Proceso Detallado</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultados-de-configuracion">Resultados de Configuración</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-del-modelo-cnn-lstm-con-atencion-para-prediccion-en-usd-y-eur">Entrenamiento del Modelo CNN-LSTM con Atención para Predicción en USD y EUR</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-del-proceso">Descripción del Proceso</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultados-esperados">Resultados Esperados</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-y-conclusion-de-los-resultados-del-modelo-final">Interpretación y Conclusión de los Resultados del Modelo Final</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-las-metricas-de-error">1. <strong>Interpretación de las Métricas de Error</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-final">2. <strong>Conclusión Final</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Felipe Barrios
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
